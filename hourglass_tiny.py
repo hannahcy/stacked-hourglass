@@ -33,6 +33,9 @@ import sys
 import datetime
 import os
 
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
 class HourglassModel():
 	""" HourglassModel class: (to be renamed)
 	Generate TensorFlow model to train and predict Human Pose from images (soon videos)
@@ -76,7 +79,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/cpu:0'
+		self.gpu = '/gpu:1' # (was 0)
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints

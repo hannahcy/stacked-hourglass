@@ -13,24 +13,24 @@ Created on Sun May 28 17:39:00 2017
 
 # Directory (do not forget the last '/')
 
-img_dir 			= '~/stacked-hourglass/dataMNIST4-10/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
-data_dir 			= '~/stacked-hourglass/dataMNIST4-10csv/' # Was '~/data/ # Directory of .csv files
+img_dir 			= '~/stacked-hourglass/dataMNIST4-5/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
+data_dir 			= '~/stacked-hourglass/dataMNIST4-5csv/' # Was '~/data/ # Directory of .csv files
 train_dir 		= '~/logs/train/'	# Path to save training logs
 test_dir 			= '~/logs/test/'	# Path to save testing logs
 processed_dir 	= '~/arrays/'		# Directory of processed images (.npy)
 
 # TensorFlow Parameters
 
-gpu = '/cpu:0'			# Indicates which GPU to use (can be replace by a CPU)
+gpu = '/gpu:1'			# Indicates which GPU to use (can be replace by a CPU) (was 0)
 cpu = '/cpu:0'			# Indicates which CPU to use (only use CPU)
 
 
 # Training Parameters
 
 learning_rate 		= 2.5e-4    # Learning Rate
-nEpochs 		    = 1		    # (Was 30) Number of epochs
-iter_by_epoch 		= 2		    # (Was 1000) Number of batch to train in one epoch
-batch_size 		    = 1		    # (Was 16) Batch Size per iteration
+nEpochs 		    = 200		# (Was 30) Number of epochs
+iter_by_epoch 		= 1000		# (Was 1000) Number of batch to train in one epoch
+batch_size 		    = 16		    # (Was 16) Batch Size per iteration
 limit_train_test 	= 24000	    # Index of separation between training and testing set
 
 step_to_save 		= 1	        # (Was 500) Step to save summaries on TensorBoard (should be lower than iter_by_epoch)
