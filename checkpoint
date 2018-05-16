@@ -1,0 +1,6 @@
+model_checkpoint_path: "/Users/hannah/stacked-hourglass/hg_refined_200_50"
+all_model_checkpoint_paths: "/Users/hannah/stacked-hourglass/hg_refined_200_46"
+all_model_checkpoint_paths: "/Users/hannah/stacked-hourglass/hg_refined_200_47"
+all_model_checkpoint_paths: "/Users/hannah/stacked-hourglass/hg_refined_200_48"
+all_model_checkpoint_paths: "/Users/hannah/stacked-hourglass/hg_refined_200_49"
+all_model_checkpoint_paths: "/Users/hannah/stacked-hourglass/hg_refined_200_50"

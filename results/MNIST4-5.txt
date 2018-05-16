@@ -1,0 +1,267 @@
+/anaconda3/envs/tensorflow/bin/python /Users/hannah/stacked-hourglass/train_launcher.py
+--Parsing Config File
+--Creating Dataset
+READING TRAIN DATA
+START SET CREATION
+SET CREATED
+--Training set : 9749  samples.
+--Validation set : 0  samples.
+CREATE MODEL:
+---Inputs : Done (0 sec.)
+---Graph : Done (27 sec.)
+---Loss : Done (0 sec.)
+---Acc : Done (2 sec.)
+---LR : Done (0 sec.)
+---Optim : Done (0 sec.)
+---Minimizer : Done (115 sec.)
+---Init : Done (0 sec.)
+2018-05-11 13:08:54.678464: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-05-11 13:08:54.678484: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-05-11 13:08:54.678492: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+Model created (145 sec.)
+Session initialization
+Sess initialized in 107 sec.
+Epoch :0/50
+
+ Train: ====================>>||100.% -cost: 221.85 -avg_loss: 0.221 -timeToEnd: 0 sec.Epoch 0/50 done in 4016 sec. -avg_time/batch: 4.01 sec.
+--Avg. Accuracy = 46.875 %
+Epoch :1/50
+
+ Train: ====================>>||100.% -cost: 3.2198 -avg_loss: 0.003 -timeToEnd: 0 sec.Epoch 1/50 done in 3627 sec. -avg_time/batch: 3.62 sec.
+--Avg. Accuracy = 51.590 %
+Epoch :2/50
+
+ Train: ====================>>||100.% -cost: 2.2283 -avg_loss: 0.002 -timeToEnd: 0 sec.Epoch 2/50 done in 3613 sec. -avg_time/batch: 3.61 sec.
+--Avg. Accuracy = 57.429 %
+Epoch :3/50
+
+ Train: ====================>>||100.% -cost: 1.8252 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 3/50 done in 3558 sec. -avg_time/batch: 3.55 sec.
+--Avg. Accuracy = 58.073 %
+Epoch :4/50
+
+ Train: ====================>>||100.% -cost: 1.5652 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 4/50 done in 3543 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 56.356 %
+Epoch :5/50
+
+ Train: ====================>>||100.% -cost: 1.4224 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 5/50 done in 3539 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 60.518 %
+Epoch :6/50
+
+ Train: ====================>>||100.% -cost: 1.3192 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 6/50 done in 3553 sec. -avg_time/batch: 3.55 sec.
+--Avg. Accuracy = 56.477 %
+Epoch :7/50
+
+ Train: ====================>>||100.% -cost: 1.2732 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 7/50 done in 3553 sec. -avg_time/batch: 3.55 sec.
+--Avg. Accuracy = 58.561 %
+Epoch :8/50
+
+ Train: ====================>>||100.% -cost: 1.2200 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 8/50 done in 3554 sec. -avg_time/batch: 3.55 sec.
+--Avg. Accuracy = 57.777 %
+Epoch :9/50
+
+ Train: ====================>>||100.% -cost: 1.1722 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 9/50 done in 3546 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 57.905 %
+Epoch :10/50
+
+ Train: ====================>>||100.% -cost: 1.1663 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 10/50 done in 3548 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 56.962 %
+Epoch :11/50
+
+ Train: ====================>>||100.% -cost: 1.1454 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 11/50 done in 3548 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 59.434 %
+Epoch :12/50
+
+ Train: ====================>>||100.% -cost: 1.1355 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 12/50 done in 3545 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 60.889 %
+Epoch :13/50
+
+ Train: ====================>>||100.% -cost: 1.1268 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 13/50 done in 3537 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 55.381 %
+Epoch :14/50
+
+ Train: ====================>>||100.% -cost: 1.1016 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 14/50 done in 3525 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 56.621 %
+Epoch :15/50
+
+ Train: ====================>>||100.% -cost: 1.0845 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 15/50 done in 3522 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 57.919 %
+Epoch :16/50
+
+ Train: ====================>>||100.% -cost: 1.0911 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 16/50 done in 3514 sec. -avg_time/batch: 3.51 sec.
+--Avg. Accuracy = 58.236 %
+Epoch :17/50
+
+ Train: ====================>>||100.% -cost: 1.0834 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 17/50 done in 3511 sec. -avg_time/batch: 3.51 sec.
+--Avg. Accuracy = 58.980 %
+Epoch :18/50
+
+ Train: ====================>>||100.% -cost: 1.0699 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 18/50 done in 3512 sec. -avg_time/batch: 3.51 sec.
+--Avg. Accuracy = 57.362 %
+Epoch :19/50
+
+ Train: ====================>>||100.% -cost: 1.0583 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 19/50 done in 3517 sec. -avg_time/batch: 3.51 sec.
+--Avg. Accuracy = 55.522 %
+Epoch :20/50
+
+ Train: ====================>>||100.% -cost: 1.0578 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 20/50 done in 3517 sec. -avg_time/batch: 3.51 sec.
+--Avg. Accuracy = 58.383 %
+Epoch :21/50
+
+ Train: ====================>>||100.% -cost: 1.0519 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 21/50 done in 3514 sec. -avg_time/batch: 3.51 sec.
+--Avg. Accuracy = 58.051 %
+Epoch :22/50
+
+ Train: ====================>>||100.% -cost: 1.0529 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 22/50 done in 3549 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 57.473 %
+Epoch :23/50
+
+ Train: ====================>>||100.% -cost: 1.0503 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 23/50 done in 3549 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 58.502 %
+Epoch :24/50
+
+ Train: ====================>>||100.% -cost: 1.0379 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 24/50 done in 3548 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 57.006 %
+Epoch :25/50
+
+ Train: ====================>>||100.% -cost: 1.0354 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 25/50 done in 3549 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 57.881 %
+Epoch :26/50
+
+ Train: ====================>>||100.% -cost: 1.0294 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 26/50 done in 3543 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 58.719 %
+Epoch :27/50
+
+ Train: ====================>>||100.% -cost: 1.0314 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 27/50 done in 3533 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 57.787 %
+Epoch :28/50
+
+ Train: ====================>>||100.% -cost: 1.0228 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 28/50 done in 3545 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 60.378 %
+Epoch :29/50
+
+ Train: ====================>>||100.% -cost: 1.0201 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 29/50 done in 3543 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 59.709 %
+Epoch :30/50
+
+ Train: ====================>>||100.% -cost: 1.0152 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 30/50 done in 3535 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 58.587 %
+Epoch :31/50
+
+ Train: ====================>>||100.% -cost: 1.0269 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 31/50 done in 3532 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 60.266 %
+Epoch :32/50
+
+ Train: ====================>>||100.% -cost: 1.0153 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 32/50 done in 3527 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 58.424 %
+Epoch :33/50
+
+ Train: ====================>>||100.% -cost: 1.0182 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 33/50 done in 3524 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 58.653 %
+Epoch :34/50
+
+ Train: ====================>>||100.% -cost: 1.0237 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 34/50 done in 3524 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 57.897 %
+Epoch :35/50
+
+ Train: ====================>>||100.% -cost: 1.0037 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 35/50 done in 3535 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 59.739 %
+Epoch :36/50
+
+ Train: ====================>>||100.% -cost: 1.0072 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 36/50 done in 3548 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 58.475 %
+Epoch :37/50
+
+ Train: ====================>>||100.% -cost: 1.0007 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 37/50 done in 3547 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 58.596 %
+Epoch :38/50
+
+ Train: ====================>>||100.% -cost: 1.0116 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 38/50 done in 3549 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 58.066 %
+Epoch :39/50
+
+ Train: ====================>>||100.% -cost: 1.0009 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 39/50 done in 3549 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 58.570 %
+Epoch :40/50
+
+ Train: ====================>>||100.% -cost: 1.0068 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 40/50 done in 3542 sec. -avg_time/batch: 3.54 sec.
+--Avg. Accuracy = 61.312 %
+Epoch :41/50
+
+ Train: ====================>>||100.% -cost: 1.0130 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 41/50 done in 3538 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 56.584 %
+Epoch :42/50
+
+ Train: ====================>>||100.% -cost: 0.9945 -avg_loss: 0.000 -timeToEnd: 0 sec.Epoch 42/50 done in 3531 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 58.282 %
+Epoch :43/50
+
+ Train: ====================>>||100.% -cost: 1.0033 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 43/50 done in 3529 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 57.046 %
+Epoch :44/50
+
+ Train: ====================>>||100.% -cost: 0.9999 -avg_loss: 0.000 -timeToEnd: 0 sec.Epoch 44/50 done in 3527 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 56.022 %
+Epoch :45/50
+
+ Train: ====================>>||100.% -cost: 1.0075 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 45/50 done in 3521 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 57.827 %
+Epoch :46/50
+
+ Train: ====================>>||100.% -cost: 0.9953 -avg_loss: 0.000 -timeToEnd: 0 sec.Epoch 46/50 done in 3521 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 57.077 %
+Epoch :47/50
+
+ Train: ====================>>||100.% -cost: 1.0059 -avg_loss: 0.001 -timeToEnd: 0 sec.Epoch 47/50 done in 3524 sec. -avg_time/batch: 3.52 sec.
+--Avg. Accuracy = 59.670 %
+Epoch :48/50
+
+ Train: ====================>>||100.% -cost: 0.9926 -avg_loss: 0.000 -timeToEnd: 0 sec.Epoch 48/50 done in 3532 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 61.667 %
+Epoch :49/50
+
+ Train: ====================>>||100.% -cost: 0.9914 -avg_loss: 0.000 -timeToEnd: 0 sec.Epoch 49/50 done in 3533 sec. -avg_time/batch: 3.53 sec.
+--Avg. Accuracy = 58.231 %
+Training Done
+Resume:
+  Epochs: 50
+  n. Images: 200000
+  Final Loss: 0.9924587766
+  Relative Loss: 0.447140150235%
+  Relative Improvement: 11.3558077626%
+  Training Time: 2 days, 2:57:48.958238
+
+Process finished with exit code 0
+
+config.cfg:
+[DataSetHG]
+training_txt_file: 'datasetMNIST4.txt'
+img_directory: '/Users/hannah/stacked-hourglass/dataMNIST4'
+img_size: 56
+hm_size: 56
+num_joints: 10 # (was 16)
+remove_joints: None
+joint_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+[Network]
+name: 'hg_refined_200'
+nFeats: 56
+nStacks: 4
+nModules: 1
+tiny: False
+nLow: 4
+dropout_rate: 0.2
+mcam: False
+[Train]
+batch_size: 4 # (was 4)
+nEpochs: 50 # (was 200)
+epoch_size: 1000 # (was 1000)
+learning_rate: 0.00025
+learning_rate_decay: 0.96
+decay_step: 2000
+weighted_loss: False
+[Validation]
+valid_iteration: 10
+[Saver]
+log_dir_train: '/Users/hannah/stacked-hourglass/hourglass_tiny/'
+log_dir_test: '/Users/hannah/stacked-hourglass/hourglass_tiny/'
+saver_step: 500
+saver_directory: ''
