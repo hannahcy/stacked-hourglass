@@ -21,7 +21,7 @@ processed_dir 	= '~/arrays/'		# Directory of processed images (.npy)
 
 # TensorFlow Parameters
 
-gpu = '/gpu:1'			# Indicates which GPU to use (can be replace by a CPU) (was 0)
+gpu = '/gpu:0'			# Indicates which GPU to use (can be replace by a CPU) (was 0)
 cpu = '/cpu:0'			# Indicates which CPU to use (only use CPU)
 
 
