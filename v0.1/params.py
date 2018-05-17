@@ -13,11 +13,11 @@ Created on Sun May 28 17:39:00 2017
 
 # Directory (do not forget the last '/')
 
-img_dir 			= '~/stacked-hourglass/dataMNIST4-5/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
-data_dir 			= '~/stacked-hourglass/dataMNIST4-5csv/' # Was '~/data/ # Directory of .csv files
-train_dir 		= '~/logs/train/'	# Path to save training logs
-test_dir 			= '~/logs/test/'	# Path to save testing logs
-processed_dir 	= '~/arrays/'		# Directory of processed images (.npy)
+img_dir 			= '/dataMNIST4-5/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
+data_dir 			= '/dataMNIST4-5csv/' # Was '~/data/ # Directory of .csv files
+train_dir 		= '/logs/train/'	# Path to save training logs
+test_dir 			= '/logs/test/'	# Path to save testing logs
+processed_dir 	= '/arrays/'		# Directory of processed images (.npy)
 
 # TensorFlow Parameters
 
