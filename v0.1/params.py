@@ -13,8 +13,8 @@ Created on Sun May 28 17:39:00 2017
 
 # Directory (do not forget the last '/')
 
-img_dir 			= 'dataMNIST1-10/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
-data_dir 			= 'dataMNIST1-10csv/' # Was '~/data/ # Directory of .csv files
+img_dir 			= 'dataMNIST9-10/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
+data_dir 			= 'dataMNIST9-10csv/' # Was '~/data/ # Directory of .csv files
 train_dir 		= 'logs/train/'	# Path to save training logs
 test_dir 			= 'logs/test/'	# Path to save testing logs
 processed_dir 	= 'arrays/'		# Directory of processed images (.npy)
