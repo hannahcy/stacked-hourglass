@@ -31,7 +31,7 @@ learning_rate 		= 2.5e-4    # Learning Rate
 nEpochs 		    = 200		# (Was 30) Number of epochs
 iter_by_epoch 		= 1000		# (Was 1000) Number of batch to train in one epoch
 batch_size 		    = 16		    # (Was 16) Batch Size per iteration
-limit_train_test 	= 1000	    # (Was 24000) Index of separation between training and testing set
+limit_train_test 	= 7000	    # (Was 24000) Index of separation between training and testing set
 
 step_to_save 		= 1	        # (Was 500) Step to save summaries on TensorBoard (should be lower than iter_by_epoch)
 random_angle_max 	= 30		# Max of random rotation

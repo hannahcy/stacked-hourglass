@@ -187,7 +187,7 @@ class DataGenerator():
 			validation_rate		: Percentage of validation data (in ]0,1[, don't waste time use 0.1)
 		"""
 		sample = len(self.train_table)
-		print("sample: "+str(sample))
+		#print("sample: "+str(sample))
 		valid_sample = int(sample * validation_rate)
 		self.train_set = self.train_table[:sample - valid_sample]
 		self.valid_set = []
@@ -202,7 +202,7 @@ class DataGenerator():
 		np.save('Dataset-Validation-Set', self.valid_set)
 		np.save('Dataset-Training-Set', self.train_set)
 		#print("trainset: "+str(self.train_set))
-		print("validset: "+str(self.valid_set))
+		#print("validset: "+str(self.valid_set))
 		print('--Training set :', len(self.train_set), ' samples.')
 		print('--Validation set :', len(self.valid_set), ' samples.')
 	
