@@ -186,7 +186,7 @@ class DataGenerator():
 			validation_rate		: Percentage of validation data (in ]0,1[, don't waste time use 0.1)
 		"""
 		sample = len(self.train_table)
-		print("sample: "+sample)
+		print("sample: "+str(sample))
 		valid_sample = int(sample * validation_rate)
 		self.train_set = self.train_table[:sample - valid_sample]
 		self.valid_set = []
