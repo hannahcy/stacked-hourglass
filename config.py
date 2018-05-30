@@ -29,7 +29,7 @@ FLIPPED = True
 # model parameter
 #
 
-IMAGE_SIZE = 56 # was 448
+IMAGE_SIZE = 84 # was 448
 
 CELL_SIZE = 7
 

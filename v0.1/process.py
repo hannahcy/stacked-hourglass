@@ -52,12 +52,12 @@ joint06 = openCsv(path, '06_pelvis.csv')
 joint07 = openCsv(path, '07_thorax.csv')
 joint08 = openCsv(path, '08_neck.csv')
 joint09 = openCsv(path, '09_head.csv')
-joint10 = openCsv(path, '10_rWrist.csv')
-joint11 = openCsv(path, '11_rElbow.csv')
-joint12 = openCsv(path, '12_rShoulder.csv')
-joint13 = openCsv(path, '13_lWrist.csv')
-joint14 = openCsv(path, '14_lElbow.csv')
-joint15 = openCsv(path, '15_lShoulder.csv')
+#joint10 = openCsv(path, '10_rWrist.csv')
+#joint11 = openCsv(path, '11_rElbow.csv')
+#joint12 = openCsv(path, '12_rShoulder.csv')
+#joint13 = openCsv(path, '13_lWrist.csv')
+#joint14 = openCsv(path, '14_lElbow.csv')
+#joint15 = openCsv(path, '15_lShoulder.csv')
 
 def getPosition(index):
 	"""
@@ -66,9 +66,9 @@ def getPosition(index):
 		args :
 			index : (str) index of the image
 		return :
-			np.array : size 16x2 (body joints x coordinates)
+			np.array : size 10x2 (body joints x coordinates) (Was 16x2)
 	"""
-	pos = np.zeros((16,2))
+	pos = np.zeros((10,2)) # Was( 16,2)
 	pos[0,:] = joint00[index,:]
 	pos[1,:] = joint01[index,:]
 	pos[2,:] = joint02[index,:]
@@ -79,12 +79,12 @@ def getPosition(index):
 	pos[7,:] = joint07[index,:]
 	pos[8,:] = joint08[index,:]
 	pos[9,:] = joint09[index,:]
-	pos[10,:] = joint10[index,:]
-	pos[11,:] = joint11[index,:]
-	pos[12,:] = joint12[index,:]
-	pos[13,:] = joint13[index,:]
-	pos[14,:] = joint14[index,:]
-	pos[15,:] = joint15[index,:]
+	#pos[10,:] = joint10[index,:]
+	#pos[11,:] = joint11[index,:]
+	#pos[12,:] = joint12[index,:]
+	#pos[13,:] = joint13[index,:]
+	#pos[14,:] = joint14[index,:]
+	#pos[15,:] = joint15[index,:]
 	return pos
 
 
@@ -117,7 +117,7 @@ def toTrainList():
 	labels = np.array(np.genfromtxt( path + 'tset.csv', delimiter = ','), np.uint8)[1:]
 	with open(path + 'name.csv', 'r') as file:
 		reader = csv.reader(file)
-		name = list(reader)[1:]
+		name = list(reader)[1:]S
 		imList = os.listdir(arraypath)
 		toTrain = []
 		for i in range(len(imList)):
