@@ -157,9 +157,10 @@ class DataGenerator():
 		Args:
 			name 	: Name of the sample
 		"""
-		for i in range(self.data_dict[name]['joints'].shape[0]):
-			if np.array_equal(self.data_dict[name]['joints'][i],[-1,-1]):
-				return False
+		### Took out this condition because in the current context there are NONE without missing ``joints''
+		#for i in range(self.data_dict[name]['joints'].shape[0]):
+			#if np.array_equal(self.data_dict[name]['joints'][i],[-1,-1]):
+				#return False
 		return True
 	
 	def _give_batch_name(self, batch_size = 16, set = 'train'):
@@ -200,7 +201,7 @@ class DataGenerator():
 		print('SET CREATED')
 		np.save('Dataset-Validation-Set', self.valid_set)
 		np.save('Dataset-Training-Set', self.train_set)
-		print("trainset: "+str(self.train_set))
+		#print("trainset: "+str(self.train_set))
 		print("validset: "+str(self.valid_set))
 		print('--Training set :', len(self.train_set), ' samples.')
 		print('--Validation set :', len(self.valid_set), ' samples.')
