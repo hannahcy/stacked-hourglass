@@ -150,7 +150,7 @@ class DataGenerator():
 		""" Randomize the set
 		"""
 		random.shuffle(self.train_table)
-		print(self.train_table)
+		#print(self.train_table)
 	
 	def _complete_sample(self, name):
 		""" Check if a sample has no missing value
@@ -186,6 +186,7 @@ class DataGenerator():
 			validation_rate		: Percentage of validation data (in ]0,1[, don't waste time use 0.1)
 		"""
 		sample = len(self.train_table)
+		print("sample: "+sample)
 		valid_sample = int(sample * validation_rate)
 		self.train_set = self.train_table[:sample - valid_sample]
 		self.valid_set = []
@@ -199,6 +200,8 @@ class DataGenerator():
 		print('SET CREATED')
 		np.save('Dataset-Validation-Set', self.valid_set)
 		np.save('Dataset-Training-Set', self.train_set)
+		print("trainset: "+str(self.train_set))
+		print("validset: "+str(self.valid_set))
 		print('--Training set :', len(self.train_set), ' samples.')
 		print('--Validation set :', len(self.valid_set), ' samples.')
 	
