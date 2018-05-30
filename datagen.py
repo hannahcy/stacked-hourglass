@@ -144,12 +144,13 @@ class DataGenerator():
 				self.data_dict[name] = {'box' : box, 'joints' : joints, 'weights' : w}
 				self.train_table.append(name)
 		input_file.close()
-		print(self.train_table) #####
+		#print(self.train_table) #####
 	
 	def _randomize(self):
 		""" Randomize the set
 		"""
 		random.shuffle(self.train_table)
+		print(self.train_table)
 	
 	def _complete_sample(self, name):
 		""" Check if a sample has no missing value
