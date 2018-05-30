@@ -41,7 +41,7 @@ random_angle_min 	= -30		# Min of random rotation
 
 nbStacks            = 4	 			# (Was 8) Number of stacks
 outDim 		        = 10			# Number of output channels (how many joints) (was 16)
-nFeat 		        = 256			# Number of feature channels (was 256)
+nFeat 		        = 128			# Number of feature channels (was 256)
 nLow 		        = 4 			# Number of downsampling by stacks (3 or 4 for better results)
 nModule             = 1				# Number of upsampling iterations (Not implemented yet)
 
