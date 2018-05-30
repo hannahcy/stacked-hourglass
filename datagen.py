@@ -144,7 +144,7 @@ class DataGenerator():
 				self.data_dict[name] = {'box' : box, 'joints' : joints, 'weights' : w}
 				self.train_table.append(name)
 		input_file.close()
-		print(self.train_table[0]) #####
+		print(self.train_table) #####
 	
 	def _randomize(self):
 		""" Randomize the set
