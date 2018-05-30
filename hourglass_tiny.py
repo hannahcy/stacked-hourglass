@@ -625,7 +625,7 @@ class HourglassModel():
 			arg		: Tuple of max position
 		"""
 		resh = tf.reshape(tensor, [-1])
-		argmax = tf.arg_max(resh, 0)
+		argmax = tf.argmax(resh, 0) # (Changed function from arg_max)
 		return (argmax // tensor.get_shape().as_list()[0], argmax % tensor.get_shape().as_list()[0])
 	
 	def _compute_err(self, u, v):
