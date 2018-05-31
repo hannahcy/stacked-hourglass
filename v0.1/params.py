@@ -13,8 +13,8 @@ Created on Sun May 28 17:39:00 2017
 
 # Directory (do not forget the last '/')
 
-img_dir 			= 'dataMNIST9-9/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
-data_dir 			= 'dataMNIST9-9csv/' # Was '~/data/ # Directory of .csv files
+img_dir 			= 'dataMarsden4-4/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
+data_dir 			= 'dataMarsden4-4csv/' # Was '~/data/ # Directory of .csv files
 train_dir 		= 'logs/train/'	# Path to save training logs
 test_dir 			= 'logs/test/'	# Path to save testing logs
 processed_dir 	= 'arrays/'		# Directory of processed images (.npy)
@@ -40,8 +40,8 @@ random_angle_min 	= -30		# Min of random rotation
 # Hourglass Parameters
 
 nbStacks            = 4	 			# (Was 8) Number of stacks
-outDim 		        = 9			# Number of output channels (how many joints) (was 16)
-nFeat 		        = 128			# Number of feature channels (was 256)
+outDim 		        = 4			# Number of output channels (how many joints) (was 16)
+nFeat 		        = 256			# Number of feature channels (was 256)
 nLow 		        = 4 			# Number of downsampling by stacks (3 or 4 for better results)
 nModule             = 1				# Number of upsampling iterations (Not implemented yet)
 
