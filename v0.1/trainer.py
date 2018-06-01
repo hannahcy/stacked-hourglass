@@ -34,6 +34,7 @@ imageOnDisk = process.cleanList(os.listdir(process.arraypath))
 shuffle(imageOnDisk)
 trainingData = imageOnDisk[:params.limit_train_test]
 testingData = imageOnDisk[params.limit_train_test:]
+print(testingData)
 testingData = fullTestSet(testingData, name, weights)
 batchSize = params.batch_size
 
