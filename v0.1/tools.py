@@ -18,7 +18,7 @@ def fullTestSet(test, name, weight):
 	"""
 	final = []
 	for i in range(len(test)):
-		if np.array_equal(weight[name.index([test[i]+'.jpg'])], np.ones((4,),np.uint8)): # WAS 16 -> 4
+		if np.array_equal(weight[name.index([test[i]+'.jpg'])], np.ones((2,),np.uint8)): # WAS 16 -> 4
 			final.append(test[i])
 	return final
 
