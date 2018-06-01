@@ -33,7 +33,10 @@ weights = np.array(np.genfromtxt(process.path + 'weight_joint.csv', delimiter=',
 imageOnDisk = process.cleanList(os.listdir(process.arraypath))
 shuffle(imageOnDisk)
 trainingData = imageOnDisk[:params.limit_train_test]
+print("Training Data:")
+print(trainingData)
 testingData = imageOnDisk[params.limit_train_test:]
+print("Test Data:")
 print(testingData)
 testingData = fullTestSet(testingData, name, weights)
 batchSize = params.batch_size
