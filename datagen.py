@@ -188,6 +188,7 @@ class DataGenerator():
 		"""
 		sample = len(self.train_table)
 		print("sample: "+str(sample))
+		print(self.train_table)
 		valid_sample = int(sample * validation_rate)
 		self.train_set = self.train_table[:sample - valid_sample]
 		self.valid_set = []
