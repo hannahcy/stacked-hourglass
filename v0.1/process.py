@@ -117,7 +117,7 @@ def toTrainList():
 	labels = np.array(np.genfromtxt( path + 'tset.csv', delimiter = ','), np.uint8)[1:]
 	with open(path + 'name.csv', 'r') as file:
 		reader = csv.reader(file)
-		name = list(reader)[1:]S
+		name = list(reader)[1:]
 		imList = os.listdir(arraypath)
 		toTrain = []
 		for i in range(len(imList)):
