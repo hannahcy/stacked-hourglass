@@ -157,7 +157,7 @@ class DataGenerator():
 		Args:
 			name 	: Name of the sample
 		"""
-		### Took out this condition because in the current context there are NONE without missing ``joints''
+		### Hannah -- took out this condition because in the current context there are NONE without missing ``joints''
 		#for i in range(self.data_dict[name]['joints'].shape[0]):
 			#if np.array_equal(self.data_dict[name]['joints'][i],[-1,-1]):
 				#return False
@@ -187,7 +187,7 @@ class DataGenerator():
 			validation_rate		: Percentage of validation data (in ]0,1[, don't waste time use 0.1)
 		"""
 		sample = len(self.train_table)
-		#print("sample: "+str(sample))
+		print("sample: "+str(sample))
 		valid_sample = int(sample * validation_rate)
 		self.train_set = self.train_table[:sample - valid_sample]
 		self.valid_set = []
