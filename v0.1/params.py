@@ -13,8 +13,8 @@ Created on Sun May 28 17:39:00 2017
 
 # Directory (do not forget the last '/')
 
-img_dir 			= 'dataMarsden4-2/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
-data_dir 			= 'dataMarsden4-2csv/' # Was '~/data/ # Directory of .csv files
+img_dir 			= 'dataMarsden9-9/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
+data_dir 			= 'dataMarsden9-9csv/' # Was '~/data/ # Directory of .csv files
 train_dir 		= 'logs/train/'	# Path to save training logs
 test_dir 			= 'logs/test/'	# Path to save testing logs
 processed_dir 	= 'arrays/'		# Directory of processed images (.npy)
@@ -30,7 +30,7 @@ cpu = '/cpu:0'			# Indicates which CPU to use (only use CPU)
 learning_rate 		= 2.5e-4    # Learning Rate
 nEpochs 		    = 200		# (Was 30) Number of epochs
 iter_by_epoch 		= 1000		# (Was 1000) Number of batch to train in one epoch
-batch_size 		    = 16		    # (Was 16) Batch Size per iteration
+batch_size 		    = 16		# (Was 16) Batch Size per iteration
 limit_train_test 	= 7000	    # (Was 24000) Index of separation between training and testing set
 
 step_to_save 		= 1	        # (Was 500) Step to save summaries on TensorBoard (should be lower than iter_by_epoch)
@@ -40,7 +40,7 @@ random_angle_min 	= -30		# Min of random rotation
 # Hourglass Parameters
 
 nbStacks            = 4	 			# (Was 8) Number of stacks
-outDim 		        = 2			# Number of output channels (how many joints) (was 16)
+outDim 		        = 9			    # Number of output channels (how many joints) (was 16)
 nFeat 		        = 256			# Number of feature channels (was 256)
 nLow 		        = 4 			# Number of downsampling by stacks (3 or 4 for better results)
 nModule             = 1				# Number of upsampling iterations (Not implemented yet)
