@@ -422,25 +422,44 @@ class DataGenerator():
 						name = random.choice(self.train_set)
 					elif sample_set == 'valid':
 						name = random.choice(self.valid_set)
+					print("1")
 					joints = self.data_dict[name]['joints']
+					print("2")
 					box = self.data_dict[name]['box']
+					print("3")
 					weight = np.asarray(self.data_dict[name]['weights'])
-					train_weights[i] = weight 
+					print("4")
+					train_weights[i] = weight
+					print("5")
 					img = self.open_img(name)
+					print("6")
 					padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
+					print("7")
 					new_j = self._relative_joints(cbox,padd, joints, to_size=64)
+					print("8")
 					hm = self._generate_hm(64, 64, new_j, 64, weight)
+					print("9")
 					img = self._crop_img(img, padd, cbox)
+					print("10")
 					img = img.astype(np.uint8)
+					print("11")
 					img = scm.imresize(img, (256,256))
+					print("12")
 					img, hm = self._augment(img, hm)
+					print("13")
 					hm = np.expand_dims(hm, axis = 0)
+					print("14")
 					hm = np.repeat(hm, stacks, axis = 0)
+					print("15")
 					if normalize:
 						train_img[i] = img.astype(np.float32) / 255
+						print("16")
 					else :
 						train_img[i] = img.astype(np.float32)
+						print("17")
+					print("18")
 					train_gtmap[i] = hm
+					print("19")
 					i = i + 1
 				except :
 					print('error file: ', name)
