@@ -415,6 +415,7 @@ class DataGenerator():
 			train_img = np.zeros((batch_size, 256,256,3), dtype = np.float32)
 			train_gtmap = np.zeros((batch_size, stacks, 64, 64, len(self.joints_list)), np.float32)
 			train_weights = np.zeros((batch_size, len(self.joints_list)), np.float32)
+			print('train_weights: '+ str(train_weights))
 			i = 0
 			while i < batch_size:
 				try:
@@ -422,13 +423,14 @@ class DataGenerator():
 						name = random.choice(self.train_set)
 					elif sample_set == 'valid':
 						name = random.choice(self.valid_set)
-					print("1")
+					#print("1")
 					joints = self.data_dict[name]['joints']
-					print("2")
+					#print("2")
 					box = self.data_dict[name]['box']
-					print("3")
+					#print("3")
 					weight = np.asarray(self.data_dict[name]['weights'])
-					print("4")
+					print('weight: '+ str(weight))
+					#print("4")
 					train_weights[i] = weight
 					print("5")
 					img = self.open_img(name)
