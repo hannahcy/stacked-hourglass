@@ -13,6 +13,7 @@ Created on Sun May 28 17:39:00 2017
 
 # Directory (do not forget the last '/')
 
+'''
 img_dir 			= 'dataMarsden16-16/' # Was '~/images/' # Directory of image dataset (.png, .jpg)
 data_dir 			= 'dataMarsden16-16csv/' # Was '~/data/ # Directory of .csv files
 train_dir 		= 'logs/train/'	# Path to save training logs
@@ -48,5 +49,5 @@ nModule             = 1				# Number of upsampling iterations (Not implemented ye
 
 
 
-
+'''
 

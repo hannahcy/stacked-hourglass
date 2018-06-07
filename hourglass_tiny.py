@@ -231,7 +231,18 @@ class HourglassModel():
 			self.resume['accur'] = []
 			self.resume['loss'] = []
 			self.resume['err'] = []
-			for epoch in range(nEpochs):
+			# Add accuracy output before any training
+			print('Epoch:' + '0/' + str(nEpochs) + '\n')
+			print('Before training\n')
+			accuracy_array = np.array([0.0] * len(self.joint_accur))
+			for i in range(validIter):
+				img_valid, gt_valid, w_valid = next(self.generator)
+				accuracy_pred = self.Session.run(self.joint_accur,
+												 feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
+				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
+			print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
+			#end my insertion
+			for epoch in range(1,nEpochs+1):
 				epochstartTime = time.time()
 				avg_cost = 0.
 				cost = 0.
