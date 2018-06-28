@@ -239,6 +239,8 @@ class HourglassModel():
 				img_valid, gt_valid, w_valid = next(self.generator)
 				accuracy_pred = self.Session.run(self.joint_accur,
 												 feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
+				if i is 1:
+					print(accuracy_pred)
 				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
 			print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
 			#end my insertion
@@ -270,6 +272,8 @@ class HourglassModel():
 							_, c, = self.Session.run([self.train_rmsprop, self.loss], feed_dict = {self.img : img_train, self.gtMaps: gt_train, self.weights: weight_train})
 						else:	
 							_, c, = self.Session.run([self.train_rmsprop, self.loss], feed_dict = {self.img : img_train, self.gtMaps: gt_train})
+					#if i is 1:
+						#print(self.get_output())
 					cost += c
 					avg_cost += c/epochSize
 				epochfinishTime = time.time()
@@ -288,9 +292,12 @@ class HourglassModel():
 				self.resume['loss'].append(cost)
 				# Validation Set
 				accuracy_array = np.array([0.0]*len(self.joint_accur))
+				print(self.get_output())
 				for i in range(validIter):
 					img_valid, gt_valid, w_valid = next(self.generator)
 					accuracy_pred = self.Session.run(self.joint_accur, feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
+					if i is 1:
+						print(accuracy_pred)
 					accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
 				print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
 				self.resume['accur'].append(accuracy_pred)
@@ -649,6 +656,10 @@ class HourglassModel():
 		"""
 		u_x,u_y = self._argmax(u)
 		v_x,v_y = self._argmax(v)
+
+		################################### HERE ###################################
+		################################### WHY 91??
+
 		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(91))
 	
 	def _accur(self, pred, gtMap, num_image):
