@@ -292,7 +292,8 @@ class HourglassModel():
 				self.resume['loss'].append(cost)
 				# Validation Set
 				accuracy_array = np.array([0.0]*len(self.joint_accur))
-				print(self.get_output())
+				temp = reshape(self.get_output(),1,64,64)
+				print(temp)
 				for i in range(validIter):
 					img_valid, gt_valid, w_valid = next(self.generator)
 					accuracy_pred = self.Session.run(self.joint_accur, feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
