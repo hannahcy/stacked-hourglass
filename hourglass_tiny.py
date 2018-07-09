@@ -144,7 +144,7 @@ class HourglassModel():
 				if self.w_loss:
 					self.weights = tf.placeholder(dtype = tf.float32, shape = (None, self.outDim))
 				# Shape Ground Truth Map: batchSize x nStack x 64 x 64 x outDim
-				self.gtMaps = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 64, 64, self.outDim))
+				self.gtMaps = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 35, 35, self.outDim)) # Was 64, 64
 				# TODO : Implement weighted loss function
 				# NOT USABLE AT THE MOMENT
 				#weights = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 1, 1, self.outDim))
