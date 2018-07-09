@@ -249,7 +249,7 @@ class PredictProcessor():
 		"""
 		if debug:
 			t = time()
-		if img.shape == (140,140,3): # Was (256,256,3)
+		if img.shape == (128,128,3): # Was (256,256,3)
 			if sess is None:
 				out = self.HG.Session.run(self.HG.pred_sigmoid, feed_dict={self.HG.img : np.expand_dims(img, axis = 0)})
 			else:
