@@ -780,7 +780,7 @@ class HourglassModel():
 				#low[i] = tmplow
 			#----------------Lower Branch
 			if n>1:
-				low2 = self._hg_mcam(low[-1], n-1, numOut, int(imSize/2)-1, nModual) # ADDED -1
+				low2 = self._hg_mcam(low[-1], n-1, numOut, int(imSize/2), nModual)
 			else:
 				low2 = self._residual(low[-1], numOut)
 			low3 = self._residual(low2, numOut)

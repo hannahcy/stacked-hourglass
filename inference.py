@@ -246,12 +246,12 @@ class Inference():
 		cv2.destroyAllWindows()
 		cam.release()
 
-if __name__ == '__main__':
-	inference = Inference(model='hg_refined_200_60')
-	image = mpimg.imread('dataMarsden25-25-SPLIT/08000.jpg')
-	print('Image Shape:')
-	print(image.shape)
-	inference.predictHM(image)
+# if __name__ == '__main__':
+# 	inference = Inference(model='hg_refined_200_60')
+# 	image = mpimg.imread('dataMarsden25-25-SPLIT/08000.jpg')
+# 	print('Image Shape:')
+# 	print(image.shape)
+# 	inference.predictHM(image)
 		
 		
 		
