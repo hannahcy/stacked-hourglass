@@ -441,6 +441,7 @@ class HourglassModel():
 						else:
 							out[0] = self._conv(ll[0], self.outDim, 1, 1, 'VALID', 'out')
 						out_[0] = self._conv(out[0], self.nFeat, 1, 1, 'VALID', 'out_')
+						print('THIS ONE 1')
 						sum_[0] = tf.add_n([out_[0], ll[0], r3], name = 'merge')
 					for i in range(1, self.nStack - 1):
 						with tf.name_scope('stage_' + str(i)):
@@ -453,6 +454,7 @@ class HourglassModel():
 							else:
 								out[i] = self._conv(ll[i], self.outDim, 1, 1, 'VALID', 'out')
 							out_[i] = self._conv(out[i], self.nFeat, 1, 1, 'VALID', 'out_')
+							print('THIS ONE 2')
 							sum_[i] = tf.add_n([out_[i], ll[i], sum_[i-1]], name= 'merge')
 					with tf.name_scope('stage_' + str(self.nStack - 1)):
 						hg[self.nStack - 1] = self._hourglass(sum_[self.nStack - 2], self.nLow, self.nFeat, 'hourglass')
@@ -479,6 +481,7 @@ class HourglassModel():
 						else:
 							out[0] = self._conv(ll[0], self.outDim, 1, 1, 'VALID', 'out')
 						out_[0] = self._conv(out[0], self.nFeat, 1, 1, 'VALID', 'out_')
+						print('THIS ONE 3')
 						sum_[0] = tf.add_n([out_[0], r3, ll_[0]], name='merge')
 					for i in range(1, self.nStack -1):
 						with tf.name_scope('stage_' + str(i)):
@@ -491,6 +494,7 @@ class HourglassModel():
 							else:
 								out[i] = self._conv(ll[i], self.outDim, 1, 1, 'VALID', 'out')
 							out_[i] = self._conv(out[i], self.nFeat, 1, 1, 'VALID', 'out_')
+							print('THIS ONE 4')
 							sum_[i] = tf.add_n([out_[i], sum_[i-1], ll_[0]], name= 'merge')
 					with tf.name_scope('stage_' + str(self.nStack -1)):
 						hg[self.nStack - 1] = self._hourglass(sum_[self.nStack - 2], self.nLow, self.nFeat, 'hourglass')
@@ -604,8 +608,10 @@ class HourglassModel():
 			convb = self._conv_block(inputs, numOut)
 			skipl = self._skip_layer(inputs, numOut)
 			if self.modif:
+				print('THIS ONE 5')
 				return tf.nn.relu(tf.add_n([convb, skipl], name = 'res_block'))
 			else:
+				print('THIS ONE 6')
 				return tf.add_n([convb, skipl], name = 'res_block')
 	
 	def _hourglass(self, inputs, n, numOut, name = 'hourglass'):
@@ -632,8 +638,10 @@ class HourglassModel():
 			up_2 = tf.image.resize_nearest_neighbor(low_3, tf.shape(low_3)[1:3]*2, name = 'upsampling')
 			if self.modif:
 				# Use of RELU
+				print('THIS ONE 7')
 				return tf.nn.relu(tf.add_n([up_2,up_1]), name='out_hg')
 			else:
+				print('THIS ONE 8')
 				return tf.add_n([up_2,up_1], name='out_hg')
 	
 	def _argmax(self, tensor):
@@ -718,6 +726,7 @@ class HourglassModel():
 				else:
 					conv = tf.nn.conv2d(Q[i-1], sharedK, [1,1,1,1], padding='SAME', data_format='NHWC')
 				C.append(conv)
+				print('THIS ONE 9')
 				Q_tmp = tf.nn.sigmoid(tf.add_n([C[i], U]))
 				Q.append(Q_tmp)
 			stacks = []
@@ -742,6 +751,7 @@ class HourglassModel():
 
 	def _residual_pool(self, inputs, numOut, name = 'residual_pool'):
 		with tf.name_scope(name):
+			print('THIS ONE 10')
 			return tf.add_n([self._conv_block(inputs, numOut), self._skip_layer(inputs, numOut), self._pool_layer(inputs, numOut)])
 	
 	def _rep_residual(self, inputs, numOut, nRep, name = 'rep_residual'):
@@ -791,6 +801,7 @@ class HourglassModel():
 			print(up)
 			print('UP_2')
 			print(up_2)
+			print('THIS ONE 11')
 			return tf.add_n([up[-1], up_2], name = 'out_hg')
 	
 	def _lin(self, inputs, numOut, name = 'lin'):
