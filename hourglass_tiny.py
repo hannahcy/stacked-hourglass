@@ -605,8 +605,8 @@ class HourglassModel():
 			name	: Name of the block
 		"""
 		with tf.name_scope(name):
-			convb = self._conv_block(inputs, numOut-1) # ADDED -1
-			skipl = self._skip_layer(inputs, numOut-1) # ADDED -1
+			convb = self._conv_block(inputs, numOut)
+			skipl = self._skip_layer(inputs, numOut)
 			if self.modif:
 				#print('THIS ONE 5')
 				return tf.nn.relu(tf.add_n([convb, skipl], name = 'res_block'))
@@ -796,7 +796,7 @@ class HourglassModel():
 				#print('HERE 2')
 				low2 = self._residual(low[-1], numOut)
 			low3 = self._residual(low2, numOut)
-			up_2 = tf.image.resize_nearest_neighbor(low3, tf.shape(low3)[1:3]*2, name = 'upsampling')
+			up_2 = tf.image.resize_nearest_neighbor(low3, (tf.shape(low3)[1:3]*2)+1, name = 'upsampling') # ADDED +1
 			#print('UP')
 			#print(up)
 			#print('UP_2')
