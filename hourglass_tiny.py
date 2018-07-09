@@ -140,11 +140,11 @@ class HourglassModel():
 		with tf.device(self.gpu):
 			with tf.name_scope('inputs'):
 				# Shape Input Image - batchSize: None, height: 256, width: 256, channel: 3 (RGB)
-				self.img = tf.placeholder(dtype= tf.float32, shape= (None, 256, 256, 3), name = 'input_img') # Was 256,256,3 CHANGE TO 128 for heatmaps
+				self.img = tf.placeholder(dtype= tf.float32, shape= (None, 128, 128, 3), name = 'input_img') # Was 256,256,3 CHANGE TO 128 for heatmaps
 				if self.w_loss:
 					self.weights = tf.placeholder(dtype = tf.float32, shape = (None, self.outDim))
 				# Shape Ground Truth Map: batchSize x nStack x 64 x 64 x outDim
-				self.gtMaps = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 64, 64, self.outDim)) # Was 64, 64 CHANGE TO 32 FOR HEATMAPS
+				self.gtMaps = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 32, 32, self.outDim)) # Was 64, 64 CHANGE TO 32 FOR HEATMAPS
 				# TODO : Implement weighted loss function
 				# NOT USABLE AT THE MOMENT
 				#weights = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 1, 1, self.outDim))
