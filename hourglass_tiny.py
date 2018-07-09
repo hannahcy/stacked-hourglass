@@ -144,7 +144,7 @@ class HourglassModel():
 				if self.w_loss:
 					self.weights = tf.placeholder(dtype = tf.float32, shape = (None, self.outDim))
 				# Shape Ground Truth Map: batchSize x nStack x 64 x 64 x outDim
-				self.gtMaps = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 35, 35, self.outDim)) # Was 64, 64
+				self.gtMaps = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 32, 32, self.outDim)) # Was 64, 64
 				# TODO : Implement weighted loss function
 				# NOT USABLE AT THE MOMENT
 				#weights = tf.placeholder(dtype = tf.float32, shape = (None, self.nStack, 1, 1, self.outDim))
@@ -635,7 +635,7 @@ class HourglassModel():
 				low_2 = self._residual(low_1, numOut, name = 'low_2')
 				
 			low_3 = self._residual(low_2, numOut, name = 'low_3')
-			up_2 = tf.image.resize_nearest_neighbor(low_3, (tf.shape(low_3)[1:3]*2)+1, name = 'upsampling') # ADDED +1
+			up_2 = tf.image.resize_nearest_neighbor(low_3, tf.shape(low_3)[1:3]*2, name = 'upsampling')
 			if self.modif:
 				# Use of RELU
 				#print('THIS ONE 7')
@@ -707,7 +707,7 @@ class HourglassModel():
 			bnr_2 = self._bn_relu(conv_1)
 			pad_2 = tf.pad(bnr_2, np.array([[0,0],[1,1],[1,1],[0,0]]))
 			conv_2 = self._conv(pad_2, numOut, kernel_size=3, strides=1, name='conv')
-			upsample = tf.image.resize_nearest_neighbor(conv_2, (tf.shape(conv_2)[1:3]*2)+1, name = 'upsampling') # ADDED +1
+			upsample = tf.image.resize_nearest_neighbor(conv_2, tf.shape(conv_2)[1:3]*2, name = 'upsampling')
 		return upsample
 	
 	def _attention_iter(self, inputs, lrnSize, itersize, name = 'attention_iter'):
@@ -796,7 +796,7 @@ class HourglassModel():
 				#print('HERE 2')
 				low2 = self._residual(low[-1], numOut)
 			low3 = self._residual(low2, numOut)
-			up_2 = tf.image.resize_nearest_neighbor(low3, (tf.shape(low3)[1:3]*2)+1, name = 'upsampling') # ADDED +1
+			up_2 = tf.image.resize_nearest_neighbor(low3, tf.shape(low3)[1:3]*2, name = 'upsampling')
 			#print('UP')
 			#print(up)
 			#print('UP_2')
