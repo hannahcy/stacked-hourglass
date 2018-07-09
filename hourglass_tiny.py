@@ -780,11 +780,17 @@ class HourglassModel():
 				#low[i] = tmplow
 			#----------------Lower Branch
 			if n>1:
+				print('HERE 1')
 				low2 = self._hg_mcam(low[-1], n-1, numOut, int(imSize/2), nModual)
 			else:
+				print('HERE 2')
 				low2 = self._residual(low[-1], numOut)
 			low3 = self._residual(low2, numOut)
 			up_2 = tf.image.resize_nearest_neighbor(low3, tf.shape(low3)[1:3]*2, name = 'upsampling')
+			print('UP')
+			print(up)
+			print('UP_2')
+			print(up_2)
 			return tf.add_n([up[-1], up_2], name = 'out_hg')
 	
 	def _lin(self, inputs, numOut, name = 'lin'):
