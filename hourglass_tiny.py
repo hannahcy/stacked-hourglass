@@ -292,8 +292,8 @@ class HourglassModel():
 				self.resume['loss'].append(cost)
 				# Validation Set
 				accuracy_array = np.array([0.0]*len(self.joint_accur))
-				temp = self.get_output()
-				tf.Print(temp, [temp])
+				#temp = self.get_output()
+				#tf.Print(temp, [temp])
 				for i in range(validIter):
 					img_valid, gt_valid, w_valid = next(self.generator)
 					accuracy_pred = self.Session.run(self.joint_accur, feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
@@ -726,7 +726,7 @@ class HourglassModel():
 				else:
 					conv = tf.nn.conv2d(Q[i-1], sharedK, [1,1,1,1], padding='SAME', data_format='NHWC')
 				C.append(conv)
-				print('THIS ONE 9')
+				#print('THIS ONE 9')
 				Q_tmp = tf.nn.sigmoid(tf.add_n([C[i], U]))
 				Q.append(Q_tmp)
 			stacks = []

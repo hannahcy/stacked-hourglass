@@ -2,7 +2,7 @@ from inference import Inference
 import cv2
 import numpy as np
 
-infer=Inference(model='hg_refined_200_60')
+infer=Inference(model='hg_refined_200_200')
 
 img=cv2.imread("dataMarsden25-25-SPLIT/00000.jpg")
 
