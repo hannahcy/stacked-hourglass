@@ -58,7 +58,7 @@ class Inference():
 		pltSkeleton : Plot skeleton on image
 		runVideoFilter : SURPRISE !!!
 	"""
-	def __init__(self, config_file = 'config.cfg', model = 'hg_refined_tiny_200', yoloModel = 'YOLO_small.ckpt'):
+	def __init__(self, config_file = 'config.cfg', model = 'hg_refined_tiny_200'): #, yoloModel = 'YOLO_small.ckpt'):
 		""" Initilize the Predictor
 		Args:
 			config_file 	 	: *.cfg file with model's parameters
@@ -246,7 +246,7 @@ class Inference():
 		cam.release()
 
 if __name__ == '__main__':
-	inference = Inference(model='hg_refined_200_60', yoloModel=None)
+	inference = Inference(model='hg_refined_200_60')
 	inference.predictHM('08000.jpgA')
 		
 		
