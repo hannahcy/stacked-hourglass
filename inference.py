@@ -42,6 +42,7 @@ from yolo_net import YOLONet
 from datagen import DataGenerator
 import config as cfg
 from filters import VideoFilters
+import matplotlib.image as mpimg
 
 class Inference():
 	""" Inference Class
@@ -247,7 +248,8 @@ class Inference():
 
 if __name__ == '__main__':
 	inference = Inference(model='hg_refined_200_60')
-	inference.predictHM(8000)
+	image = mpimg.imread('dataMarsden25-25-SPLIT/08000.jpg')
+	inference.predictHM(image)
 		
 		
 		
