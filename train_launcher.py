@@ -6,6 +6,7 @@ TRAIN LAUNCHER
 import configparser
 from hourglass_tiny import HourglassModel
 from datagen import DataGenerator
+from inference import Inference
 
 def process_config(conf_file):
 	"""
@@ -47,3 +48,5 @@ if __name__ == '__main__':
 	model.generate_model()
 	model.training_init(nEpochs=params['nepochs'], epochSize=params['epoch_size'], saveStep=params['saver_step'], dataset = None)
 	
+	inference = Inference(model='hg_refined_200_200')
+	inference.predictHM('08000.jpgA')
