@@ -41,7 +41,7 @@ class HourglassModel():
 	Generate TensorFlow model to train and predict Human Pose from images (soon videos)
 	Please check README.txt for further information on model management.
 	"""
-	def __init__(self, nFeat = 256, nStack = 4, nModules = 1, nLow = 4, outputDim = 10, batch_size = 16, drop_rate = 0.2, lear_rate = 2.5e-4, decay = 0.96, decay_step = 2000, dataset = None, training = True, w_summary = True, logdir_train = None, logdir_test = None,tiny = True, attention = False,modif = True,w_loss = False, name = 'tiny_hourglass',  joints = ['0','1','2','3','4','5','6','7','8','9']):
+	def __init__(self, nFeat = 64, nStack = 4, nModules = 1, nLow = 4, outputDim = 10, batch_size = 16, drop_rate = 0.2, lear_rate = 2.5e-4, decay = 0.96, decay_step = 2000, dataset = None, training = True, w_summary = True, logdir_train = None, logdir_test = None,tiny = True, attention = False,modif = True,w_loss = False, name = 'tiny_hourglass',  joints = ['0','1','2','3','4','5','6','7','8','9']):
 		""" Initializer
 		Args:
 			nStack				: number of stacks (stage/Hourglass modules)
@@ -140,7 +140,7 @@ class HourglassModel():
 		with tf.device(self.gpu):
 			with tf.name_scope('inputs'):
 				# Shape Input Image - batchSize: None, height: 256, width: 256, channel: 3 (RGB)
-				self.img = tf.placeholder(dtype= tf.float32, shape= (None, 256, 256, 3), name = 'input_img')
+				self.img = tf.placeholder(dtype= tf.float32, shape= (None, 140, 140, 3), name = 'input_img') # Was 256,256,3
 				if self.w_loss:
 					self.weights = tf.placeholder(dtype = tf.float32, shape = (None, self.outDim))
 				# Shape Ground Truth Map: batchSize x nStack x 64 x 64 x outDim
