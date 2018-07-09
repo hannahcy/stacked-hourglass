@@ -707,7 +707,7 @@ class HourglassModel():
 			bnr_2 = self._bn_relu(conv_1)
 			pad_2 = tf.pad(bnr_2, np.array([[0,0],[1,1],[1,1],[0,0]]))
 			conv_2 = self._conv(pad_2, numOut, kernel_size=3, strides=1, name='conv')
-			upsample = tf.image.resize_nearest_neighbor(conv_2, tf.shape(conv_2)[1:3]*2, name = 'upsampling')
+			upsample = tf.image.resize_nearest_neighbor(conv_2, (tf.shape(conv_2)[1:3]*2)+1, name = 'upsampling') # ADDED +1
 		return upsample
 	
 	def _attention_iter(self, inputs, lrnSize, itersize, name = 'attention_iter'):
