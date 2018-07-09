@@ -6,6 +6,8 @@ infer=Inference(model='hg_refined_200_60')
 
 img=cv2.imread("dataMarsden25-25-SPLIT/08000.jpg")
 
+img = cv2.resize(img, (128, 128))
+
 hms=infer.predictHM(img)
 
 new_img=np.array(img)
