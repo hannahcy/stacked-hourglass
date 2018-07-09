@@ -123,7 +123,7 @@ class Inference():
 		Args:
 			img : Input Image -shape=(256x256x3) -value= uint8 (in [0, 255])
 		"""
-		return self.predict.pred(self, img / 255, debug = False, sess = None)
+		return self.predict.pred(img / 255, debug = False, sess = None)
 	# ------------------------- Joint Prediction -------------------------------
 	
 	def predictJoints(self, img, mode = 'cpu', thresh = 0.2):
