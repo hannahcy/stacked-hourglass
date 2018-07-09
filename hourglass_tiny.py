@@ -635,7 +635,7 @@ class HourglassModel():
 				low_2 = self._residual(low_1, numOut, name = 'low_2')
 				
 			low_3 = self._residual(low_2, numOut, name = 'low_3')
-			up_2 = tf.image.resize_nearest_neighbor(low_3, tf.shape(low_3)[1:3]*2, name = 'upsampling')
+			up_2 = tf.image.resize_nearest_neighbor(low_3, (tf.shape(low_3)[1:3]*2)+1, name = 'upsampling') # ADDED +1
 			if self.modif:
 				# Use of RELU
 				#print('THIS ONE 7')
