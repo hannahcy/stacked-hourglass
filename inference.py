@@ -244,9 +244,10 @@ class Inference():
 				break
 		cv2.destroyAllWindows()
 		cam.release()
-			
-				
-		
+
+if __name__ == '__main__':
+	inference = Inference(model='hg_refined_200_60')
+	inference.predictHM('08000.jpgA')
 		
 		
 		
