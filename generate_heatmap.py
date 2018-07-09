@@ -2,11 +2,11 @@ from inference import Inference
 import cv2
 import numpy as np
 
-infer=Inference(model='hg_refined_200_200')
+infer=Inference(model='hg_refined_200_201')
 
 img=cv2.imread("dataMarsden25-25-SPLIT/00000.jpg")
 
-img = cv2.resize(img, (128, 128))
+img = cv2.resize(img, (256, 256))
 
 hms=infer.predictHM(img)
 
