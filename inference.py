@@ -246,7 +246,7 @@ class Inference():
 		cam.release()
 
 if __name__ == '__main__':
-	inference = Inference(model='hg_refined_200_60')
+	inference = Inference(model='hg_refined_200_60', yoloModel=None)
 	inference.predictHM('08000.jpgA')
 		
 		
