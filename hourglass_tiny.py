@@ -41,7 +41,7 @@ class HourglassModel():
 	Generate TensorFlow model to train and predict Human Pose from images (soon videos)
 	Please check README.txt for further information on model management.
 	"""
-	def __init__(self, nFeat = 256, nStack = 4, nModules = 1, nLow = 4, outputDim = 10, batch_size = 16, drop_rate = 0.2, lear_rate = 2.5e-4, decay = 0.96, decay_step = 2000, dataset = None, training = True, w_summary = True, logdir_train = None, logdir_test = None,tiny = True, attention = False,modif = True,w_loss = False, name = 'tiny_hourglass',  joints = ['0','1','2','3','4','5','6','7','8','9']):
+	def __init__(self, nFeat = 64, nStack = 4, nModules = 1, nLow = 4, outputDim = 25, batch_size = 16, drop_rate = 0.2, lear_rate = 2.5e-4, decay = 0.96, decay_step = 2000, dataset = None, training = True, w_summary = True, logdir_train = None, logdir_test = None,tiny = True, attention = False,modif = True,w_loss = False, name = 'tiny_hourglass',  joints = ['0','1','2','3','4','5','6','7','8','9']):
 		""" Initializer
 		Args:
 			nStack				: number of stacks (stage/Hourglass modules)
@@ -79,7 +79,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/gpu:0' # (was 0)
+		self.gpu = '/cpu:0' # (was 0)
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints
@@ -231,7 +231,7 @@ class HourglassModel():
 			self.resume['accur'] = []
 			self.resume['loss'] = []
 			self.resume['err'] = []
-			# Add accuracy output before any training
+			# Added accuracy output before any training
 			print('Epoch:' + '0/' + str(nEpochs) + '\n')
 			print('Before training\n')
 			accuracy_array = np.array([0.0] * len(self.joint_accur))
