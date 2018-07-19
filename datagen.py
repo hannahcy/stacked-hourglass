@@ -248,7 +248,7 @@ class DataGenerator():
 		hm = np.zeros((height, width, num_joints), dtype = np.float32)
 		for i in range(num_joints):
 			if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
-				s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) #+ 2 TOOK OUT +2
+				s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) - 5 # CHANGED FROM +2
 				hm[:,:,i] = self._makeGaussian(height, width, sigma= s, center= (joints[i,0], joints[i,1]))
 			else:
 				hm[:,:,i] = np.zeros((height,width))
