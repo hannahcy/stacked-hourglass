@@ -239,8 +239,8 @@ class HourglassModel():
 				img_valid, gt_valid, w_valid = next(self.generator)
 				accuracy_pred = self.Session.run(self.joint_accur,
 												 feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
-				if i is 1:
-					print(accuracy_pred)
+				#if i is 1:
+					#print(accuracy_pred)
 				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
 			print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
 			#end my insertion
@@ -297,8 +297,8 @@ class HourglassModel():
 				for i in range(validIter):
 					img_valid, gt_valid, w_valid = next(self.generator)
 					accuracy_pred = self.Session.run(self.joint_accur, feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
-					if i is 1:
-						print(accuracy_pred)
+					#if i is 1:
+						#print(accuracy_pred)
 					accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
 				print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
 				self.resume['accur'].append(accuracy_pred)
@@ -669,7 +669,7 @@ class HourglassModel():
 		################################### HERE ###################################
 		################################### WHY 91??
 
-		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(91))
+		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(56)) # changed to image size
 	
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
