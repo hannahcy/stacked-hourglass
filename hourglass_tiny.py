@@ -669,7 +669,7 @@ class HourglassModel():
 		################################### HERE ###################################
 		################################### WHY 91??
 
-		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(56)) # changed to image size
+		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(42)) # changed to 3/4 image size
 	
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
