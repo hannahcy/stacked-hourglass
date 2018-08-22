@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import copy
 
-infer=Inference(model='hg_64_450')
+infer=Inference(model='trained/hg_64_450')
 
 img=cv2.imread("dataMarsden25-25-SPLITSELECTION/09184.jpg")
 
