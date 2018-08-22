@@ -123,7 +123,7 @@ class Inference():
 		Args:
 			img : Input Image -shape=(256x256x3) -value= uint8 (in [0, 255])
 		"""
-		return self.predict.pred(img / 255, debug = False, sess = None)
+		return self.predict.pred((img.astype(np.float32) / 255), debug = False, sess = None)
 	# ------------------------- Joint Prediction -------------------------------
 	
 	def predictJoints(self, img, mode = 'cpu', thresh = 0.2):
@@ -143,9 +143,9 @@ class Inference():
 			SIZE = True
 		if SIZE:
 			if mode == 'cpu':
-				return self.predict.joints_pred_numpy(batch / 255, coord = 'img', thresh = thresh, sess = None)
+				return self.predict.joints_pred_numpy(batch.astype(np.float32) / 255, coord = 'img', thresh = thresh, sess = None)
 			elif mode == 'gpu':
-				return self.predict.joints_pred(batch / 255, coord = 'img', debug = False, sess = None)
+				return self.predict.joints_pred(batch.astype(np.float32) / 255, coord = 'img', debug = False, sess = None)
 			else :
 				print("Error : Mode should be 'cpu'/'gpu'")
 		else:

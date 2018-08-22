@@ -204,7 +204,7 @@ class PredictProcessor():
 		"""
 		with self.graph.as_default():
 			with tf.name_scope('prediction'):
-				self.HG.pred_sigmoid = tf.nn.sigmoid(self.HG.output[:,self.HG.nStack - 1], name= 'sigmoid_final_prediction')
+				self.HG.pred_sigmoid = tf.nn.sigmoid(self.HG.output[:,self.HG.nStack - 1,:,:,:], name= 'sigmoid_final_prediction')
 				self.HG.pred_final = self.HG.output[:,self.HG.nStack - 1]
 				self.HG.joint_tensor = self._create_joint_tensor(self.HG.output[0], name = 'joint_tensor')
 				self.HG.joint_tensor_final = self._create_joint_tensor(self.HG.output[0,-1] , name = 'joint_tensor_final')
@@ -249,11 +249,11 @@ class PredictProcessor():
 		"""
 		if debug:
 			t = time()
-		if img.shape == (128,128,3): # Was (256,256,3) CHANGE TO 128 FOR HEATMAPS
+		if img.shape == (256,256,3): # Was (256,256,3) CHANGE TO 128 FOR HEATMAPS
 			if sess is None:
-				out = self.HG.Session.run(self.HG.pred_sigmoid, feed_dict={self.HG.img : np.expand_dims(img, axis = 0)})
+				out = self.HG.Session.run(self.HG.pred_sigmoid, feed_dict={self.HG.img : np.expand_dims(img.astype(np.float32), axis = 0)})
 			else:
-				out = sess.run(self.HG.pred_sigmoid, feed_dict={self.HG.img : np.expand_dims(img, axis = 0)})
+				out = sess.run(self.HG.pred_sigmoid, feed_dict={self.HG.img : np.expand_dims(img.astype(np.float32), axis = 0)})
 		else:
 			print('Image Size does not match placeholder shape')
 			raise Exception
@@ -1279,13 +1279,13 @@ class PredictProcessor():
 		
 if __name__ == '__main__':
 	t = time()
-	params = process_config('configTiny.cfg')
+	params = process_config('config.cfg')
 	predict = PredictProcessor(params)
 	predict.color_palette()
 	predict.LINKS_JOINTS()
 	predict.model_init()
-	predict.load_model(load = 'hg_refined_tiny_200')
-	predict.yolo_init()
-	predict.restore_yolo(load = 'YOLO_small.ckpt')
+	predict.load_model(load = 'hg_refined_200_201')
+	#predict.yolo_init()
+	#predict.restore_yolo(load = 'YOLO_small.ckpt')
 	predict._create_prediction_tensor()
 	print('Done: ', time() - t, ' sec.')

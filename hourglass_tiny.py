@@ -32,6 +32,7 @@ import numpy as np
 import sys
 import datetime
 import os
+import json
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
@@ -79,7 +80,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/gpu:0' # (was 0)
+		self.gpu = '/cpu:0' # (was 0)
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints
@@ -235,11 +236,19 @@ class HourglassModel():
 			print('Epoch:' + '0/' + str(nEpochs) + '\n')
 			print('Before training\n')
 			accuracy_array = np.array([0.0] * len(self.joint_accur))
+			print("validIter: "+ str(validIter))
 			for i in range(validIter):
 				img_valid, gt_valid, w_valid = next(self.generator)
-				accuracy_pred = self.Session.run(self.joint_accur,
-												 feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
-				#if i is 1:
+				np.set_printoptions(threshold=np.nan)
+				accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
+				with open('output0.txt', 'w') as f:
+					json.dump(output.tolist(), f)
+				with open('gtMaps0.txt', 'w') as f:
+					json.dump(target.tolist(), f)
+				with open('extras.txt', 'w') as f:
+					f.write(str(self.nStack) + '\n')
+					f.write(str(self.batchSize))
+				#if i == 1:
 					#print(accuracy_pred)
 				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
 			print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
@@ -296,7 +305,15 @@ class HourglassModel():
 				#tf.Print(temp, [temp])
 				for i in range(validIter):
 					img_valid, gt_valid, w_valid = next(self.generator)
-					accuracy_pred = self.Session.run(self.joint_accur, feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
+					np.set_printoptions(threshold=np.nan)
+					accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
+					with open('output99.txt', 'w') as f:
+						json.dump(output.tolist(), f)
+					with open('gtMaps99.txt', 'w') as f:
+						json.dump(target.tolist(), f)
+					with open('extras99.txt', 'w') as f:
+						f.write(str(self.nStack) + '\n')
+						f.write(str(self.batchSize))
 					#if i is 1:
 						#print(accuracy_pred)
 					accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
