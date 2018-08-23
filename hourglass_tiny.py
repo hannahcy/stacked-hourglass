@@ -686,8 +686,17 @@ class HourglassModel():
 		################################### HERE ###################################
 		################################### WHY 91??
 
-		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(56)) # changed to image size
-	
+		return tf.divide(tf.sqrt(tf.square(tf.to_float(u_x - v_x)) + tf.square(tf.to_float(u_y - v_y))), tf.to_float(64)) # changed to image size
+
+	def _compute_err_entire_heatmap(self, u, v):
+		"""
+		Given 2 tensors compute the difference between them (the whole heatmap)
+		:param u:
+		:param v:
+		:return:
+		"""
+		return tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(u,v))))
+
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
 		returns one minus the mean distance.
@@ -700,7 +709,10 @@ class HourglassModel():
 		"""
 		err = tf.to_float(0)
 		for i in range(num_image):
-			err = tf.add(err, self._compute_err(pred[i], gtMap[i]))
+			### For error based on entire heatmap:
+			err = tf.add(err, self._compute_err_entire_heatmap(pred[i], gtMap[i]))
+			### For error based on maximum point:
+			#err = tf.add(err, self._compute_err(pred[i], gtMap[i]))
 		return tf.subtract(tf.to_float(1), err/num_image)
 	
 	# MULTI CONTEXT ATTENTION MECHANISM
