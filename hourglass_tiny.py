@@ -80,7 +80,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/cpu:0' # (was 0)
+		self.gpu = '/gpu:0' # (was 0)
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints
@@ -713,7 +713,8 @@ class HourglassModel():
 			err = tf.add(err, self._compute_err_entire_heatmap(pred[i], gtMap[i]))
 			### For error based on maximum point:
 			#err = tf.add(err, self._compute_err(pred[i], gtMap[i]))
-		return tf.subtract(tf.to_float(1), err/num_image)
+		#return tf.subtract(tf.to_float(1), err/num_image)
+		return err / num_image
 	
 	# MULTI CONTEXT ATTENTION MECHANISM
 	# WORK IN PROGRESS DO NOT USE THESE METHODS
