@@ -695,7 +695,7 @@ class HourglassModel():
 		:param v:
 		:return:
 		"""
-		return tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(u,v))))
+		return tf.divide(tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(u,v)))), 64*64)
 
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
