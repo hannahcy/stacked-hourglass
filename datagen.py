@@ -99,7 +99,7 @@ class DataGenerator():
 			self.toReduce = True
 			self.weightJ = remove_joints
 		
-		self.letter = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N']
+		self.letter = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 		self.img_dir = img_dir
 		self.train_data_file = train_data_file
 		self.images = os.listdir(img_dir)

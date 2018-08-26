@@ -39,7 +39,7 @@ if __name__ == '__main__':
 	print('--Creating Dataset')
 	dataset = DataGenerator(params['joint_list'], params['img_directory'], params['training_txt_file'], remove_joints=params['remove_joints'])
 	dataset._create_train_table()
-	dataset._randomize()
+	#dataset._randomize()
 	dataset._create_sets()
 	#dataset.test()
 	
