@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import copy
 
-infer=Inference(model='trained/hg_4WORDS_64_8_1815')
+infer=Inference(model='trained/hg_4WORDS_MULTI_64_8_21')
 
 img=cv2.imread("dataMarsden4-4WORDSSELECTION/00358.jpg")
 
@@ -18,9 +18,9 @@ joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', '
 for i in range(np.shape(hms)[3]):
     max = np.amax(hms[0, :, :, i])
     temp = copy.deepcopy(hms[0, :, :, i]*(255/max))
-    img_small = cv2.resize(img, (64, 64))
-    img_small = cv2.cvtColor(img_small, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite('heatmaps-good/Marsden4-4WORDS/Individual/4WORDS_64_8_00358_TEST'+str(joint_list[i])+'.jpg', img_small+temp) #np.maximum(img_small,temp))
+    #img_small = cv2.resize(img, (64, 64))
+    #img_small = cv2.cvtColor(img_small, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('heatmaps-good/Marsden4-4WORDS/Individual/e20_4WORDS_64_8_00358_'+str(joint_list[i])+'.jpg', temp) #np.maximum(img_small,temp))
     index=np.argmax(hms[0,:,:,i])
     print(str(joint_list[i]), index, max, np.argmin(hms[0,:,:,i]), np.amin(hms[0,:,:,i]))
     x=index%64*4
@@ -30,4 +30,4 @@ for i in range(np.shape(hms)[3]):
     new_img=cv2.circle(img,(x,y),3,(0,0,0),-1) # black for Marsden
 
 new_img = cv2.cvtColor(new_img, cv2.COLOR_BGR2GRAY) # uncomment for Marsden
-cv2.imwrite("heatmaps-good/Marsden4-4WORDS/4WORDS_64_8_00358.jpg",new_img)
+cv2.imwrite("heatmaps-good/Marsden4-4WORDS/e20_4WORDS_64_8_00358.jpg",new_img)

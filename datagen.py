@@ -601,7 +601,7 @@ class DataGenerator():
 				joint_full = np.copy(locations)
 				max_l = max(box[2], box[3])
 				#joint_full = joint_full + [padd[1][0], padd[0][0]]
-				joint_full = joint_full - [box[0] - max_l //2,box[1] - max_l //2]
+				#joint_full = joint_full - [box[0] - max_l //2,box[1] - max_l //2]
 				#img = self._crop_img(img, padd, cbox)
 				img = img.astype(np.uint8)
 				img = scm.imresize(img, (256,256))

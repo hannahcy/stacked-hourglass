@@ -75,13 +75,13 @@ class AccuracyTester():
 
 if __name__ == '__main__':
     target = []
-    with open('gtMaps99.txt', 'r') as f:
+    with open('gtMaps0.txt', 'r') as f:
         target = json.load(f)
     target = np.array(target)
     #print("Target:")
     #print(target)
     output = []
-    with open('output99.txt', 'r') as f:
+    with open('output0.txt', 'r') as f:
         output = json.load(f)
     output = np.array(output)
     #print("Output:")
@@ -106,9 +106,9 @@ if __name__ == '__main__':
             print("amax output:", str(max_output), "argmax output:", str(argmax_output),
                   "x,y:", str(argmax_output % 64), str(argmax_output // 64))
             temp = copy.deepcopy(target[image, nStack - 1, :, :, digit] * (255 / max_target))
-            cv2.imwrite('testing/e99b_target'+ str(image) + '_' + str(digit) + '.jpg', temp)
+            cv2.imwrite('testing/e0c_target'+ str(image) + '_' + str(digit) + '.jpg', temp)
             temp = copy.deepcopy(output[image, nStack - 1, :, :, digit] * (255 / max_output))
-            cv2.imwrite('testing/e99b_output'+ str(image) + '_' + str(digit) + '.jpg', temp)
+            cv2.imwrite('testing/e0c_output'+ str(image) + '_' + str(digit) + '.jpg', temp)
             error = tester._compute_err(target[image, nStack - 1, :, :, digit], output[image, nStack - 1, :, :, digit])
             print("Error:", str(error))
 
