@@ -238,7 +238,7 @@ class HourglassModel():
 			accuracy_array = np.array([0.0] * len(self.joint_accur))
 			print("validIter: "+ str(validIter))
 			for i in range(validIter):
-				img_valid, gt_valid, w_valid = next(self.generator)
+				img_valid, gt_valid = next(self.generator)
 				np.set_printoptions(threshold=np.nan)
 				accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
 				with open('output0.txt', 'w') as f:
@@ -267,10 +267,10 @@ class HourglassModel():
 					tToEpoch = int((time.time() - epochstartTime) * (100 - percent)/(percent))
 					sys.stdout.write('\r Train: {0}>'.format("="*num) + "{0}>".format(" "*(20-num)) + '||' + str(percent)[:4] + '%' + ' -cost: ' + str(cost)[:6] + ' -avg_loss: ' + str(avg_cost)[:5] + ' -timeToEnd: ' + str(tToEpoch) + ' sec.')
 					sys.stdout.flush()
-					img_train, gt_train, weight_train = next(self.generator)
+					img_train, gt_train = next(self.generator)
 					if i % saveStep == 0:
 						if self.w_loss:
-							_, c, summary = self.Session.run([self.train_rmsprop, self.loss, self.train_op], feed_dict = {self.img : img_train, self.gtMaps: gt_train, self.weights: weight_train})
+							_, c, summary = self.Session.run([self.train_rmsprop, self.loss, self.train_op], feed_dict = {self.img : img_train, self.gtMaps: gt_train})
 						else:
 							_, c, summary = self.Session.run([self.train_rmsprop, self.loss, self.train_op], feed_dict = {self.img : img_train, self.gtMaps: gt_train})
 						# Save summary (Loss + Accuracy)
@@ -304,7 +304,7 @@ class HourglassModel():
 				#temp = self.get_output()
 				#tf.Print(temp, [temp])
 				for i in range(validIter):
-					img_valid, gt_valid, w_valid = next(self.generator)
+					img_valid, gt_valid = next(self.generator)
 					np.set_printoptions(threshold=np.nan)
 					accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
 					with open('output99.txt', 'w') as f:

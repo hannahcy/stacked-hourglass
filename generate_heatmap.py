@@ -18,7 +18,9 @@ joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', '
 for i in range(np.shape(hms)[3]):
     max = np.amax(hms[0, :, :, i])
     temp = copy.deepcopy(hms[0, :, :, i]*(255/max))
-    cv2.imwrite('heatmaps-good/Marsden4-4WORDS/Individual/4WORDS_64_8_00358_'+str(joint_list[i])+'.jpg', temp)
+    img_small = cv2.resize(img, (64, 64))
+    img_small = cv2.cvtColor(img_small, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('heatmaps-good/Marsden4-4WORDS/Individual/4WORDS_64_8_00358_TEST'+str(joint_list[i])+'.jpg', img_small+temp) #np.maximum(img_small,temp))
     index=np.argmax(hms[0,:,:,i])
     print(str(joint_list[i]), index, max, np.argmin(hms[0,:,:,i]), np.amin(hms[0,:,:,i]))
     x=index%64*4

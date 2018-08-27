@@ -37,7 +37,7 @@ from skimage import transform
 import scipy.misc as scm
 
 class DataGenerator():
-	""" DataGenerator Class : To generate Train, Validatidation and Test sets
+	""" DataGenerator Class : To generate Train, Validation and Test sets
 	for the Deep Human Pose Estimation Model 
 	Formalized DATA:
 		Inputs:
@@ -67,16 +67,14 @@ class DataGenerator():
 	
 	How to generate Dataset:
 		Create a TEXT file with the following structure:
-			image_name.jpg[LETTER] box_xmin box_ymin box_xmax b_ymax joints
-			[LETTER]:
-				One image can contain multiple person. To use the same image
-				finish the image with a CAPITAL letter [A,B,C...] for 
-				first/second/third... person in the image
- 			joints : 
-				Sequence of x_p y_p (p being the p-joint)
-				/!\ In case of missing values use -1
+			image_name.jpg joint locations
+			joint:
+				The name of the 'joint'
+ 			locations :
+				Sequence of x y for the joint
+				/!\ for now, must be same length as number of joints, but fix this in future
 				
-	The Generator will read the TEXT file to create a dictionnary
+	The Generator will read the TEXT file to create a dictionary
 	Then 2 options are available for training:
 		Store image/heatmap arrays (numpy file stored in a folder: need disk space but faster reading)
 		Generate image/heatmap arrays when needed (Generate arrays while training, increase training time - Need to compute arrays at every iteration) 
@@ -125,25 +123,28 @@ class DataGenerator():
 		self.data_dict = {}
 		input_file = open(self.train_data_file, 'r')
 		print('READING TRAIN DATA')
+		#### for each line, check if first already exists in the system
+		#### 	if so,
 		for line in input_file:
 			line = line.strip()
 			line = line.split(' ')
 			name = line[0]
-			box = list(map(int,line[1:5]))
-			joints = list(map(int,line[5:]))
-			if self.toReduce:
-				joints = self._reduce_joints(joints)
-			if joints == [-1] * len(joints):
-				self.no_intel.append(name)
-			else:
-				joints = np.reshape(joints, (-1,2))
-				w = [1] * joints.shape[0]
-				for i in range(joints.shape[0]):
-					if np.array_equal(joints[i], [-1,-1]):
-						w[i] = 0
-				self.data_dict[name] = {'box' : box, 'joints' : joints, 'weights' : w}
+			if name in self.data_dict: # if name is already in data_dict
+				joint = line[1]
+				locs = list(map(int, line[2:]))
+				locs = np.reshape(locs, (-1, 2))
+				self.data_dict[name].append(locs)
+			# self.data_dict[key] = {'locations': locations} APPEND INSTEAD
+			# self.train_table.append(name) DON'T ADD TO TRAIN_TABLE
+			else: # ie name isn't already in data_dict
+				joint = line[1]
+				locs = list(map(int, line[2:]))
+				locs = np.reshape(locs, (-1, 2))
+				self.data_dict[name] = [locs]
 				self.train_table.append(name)
+
 		input_file.close()
+		#self.train_table = list(set(self.train_table)) # remove duplicates -- each image is ONE data point
 		#print(self.train_table) #####
 	
 	def _randomize(self):
@@ -236,23 +237,30 @@ class DataGenerator():
 			y0 = center[1]
 		return np.exp(-4*np.log(2) * ((x-x0)**2 + (y-y0)**2) / sigma**2)
 	
-	def _generate_hm(self, height, width ,joints, maxlenght, weight):
+	def _generate_hm(self, height, width, joints, locations):
 		""" Generate a full Heap Map for every joints in an array
 		Args:
 			height			: Wanted Height for the Heat Map
 			width			: Wanted Width for the Heat Map
 			joints			: Array of Joints
-			maxlenght		: Lenght of the Bounding Box
+			locations		: list of lists of locations (for each joint) HANNAH
 		"""
-		num_joints = joints.shape[0]
-		hm = np.zeros((height, width, num_joints), dtype = np.float32)
-		for i in range(num_joints):
-			if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
-				s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) - 5 # CHANGED FROM +2, -5 for "280-small", -10 for "280-tiny"
-				hm[:,:,i] = self._makeGaussian(height, width, sigma= s, center= (joints[i,0], joints[i,1]))
-			else:
-				hm[:,:,i] = np.zeros((height,width))
-		return hm
+		num_joints = len(joints)
+		num_tokens = len(locations[0])
+		hm = np.zeros((height, width, num_joints, num_tokens), dtype = np.float32)
+		for type in range(num_joints):
+			#if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
+			#s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) + 2
+			s = int(np.sqrt(width) * width * 10 / 4096) - 5 # CHANGED FROM +2, -5 for "280-small", -10 for "280-tiny" HANNAH
+			for token in range(len(locations[0])):
+				hm[:,:,type,token] = self._makeGaussian(height, width, sigma= s, center= (locations[type][token][0], locations[type][token][1]))
+		# have hm of shape [height,width,types,tokens]
+		# need to combine all the tokens for each type (simple addition, since they're all zeros otherwise?
+		condensed_hm = np.zeros((height, width, num_joints), dtype = np.float32)
+		for type in range(num_joints):
+			for token in range(num_tokens):
+				condensed_hm[:,:,type] = condensed_hm[:,:,type] + hm[:,:,type,token]
+		return condensed_hm
 		
 	def _crop_data(self, height, width, box, joints, boxp = 0.05):
 		""" Automatically returns a padding vector and a bounding box given
@@ -320,7 +328,7 @@ class DataGenerator():
 		hm = hm[crop_box[1] - max_lenght //2:crop_box[1] + max_lenght//2, crop_box[0] - max_lenght // 2:crop_box[0] + max_lenght // 2]
 		return img, hm
 	
-	def _relative_joints(self, box, padding, joints, to_size = 64):
+	def _relative_joints(self, box, joints, to_size = 64):
 		""" Convert Absolute joint coordinates to crop box relative joint coordinates
 		(Used to compute Heat Maps)
 		Args:
@@ -330,9 +338,9 @@ class DataGenerator():
 		"""
 		new_j = np.copy(joints)
 		max_l = max(box[2], box[3])
-		new_j = new_j + [padding[1][0], padding[0][0]]
-		new_j = new_j - [box[0] - max_l //2,box[1] - max_l //2]
-		new_j = new_j * to_size / (max_l + 0.0000001)
+		#new_j = new_j + [padding[1][0], padding[0][0]]
+		#new_j = new_j - [box[0] - max_l //2, box[1] - max_l //2]
+		new_j = (new_j * to_size) / (max_l + 0.0000001)
 		return new_j.astype(np.int32)
 		
 		
@@ -350,7 +358,7 @@ class DataGenerator():
 	def _generator(self, batch_size = 16, stacks = 4, set = 'train', stored = False, normalize = True, debug = False):
 		""" Create Generator for Training
 		Args:
-			batch_size	: Number of images per batch
+			batch_size		: Number of images per batch
 			stacks			: Number of stacks/module in the network
 			set				: Training/Testing/Validation set # TODO: Not implemented yet
 			stored			: Use stored Value # TODO: Not implemented yet
@@ -369,18 +377,23 @@ class DataGenerator():
 				if name[:-1] in self.images:
 					try :
 						img = self.open_img(name)
-						joints = self.data_dict[name]['joints']
-						box = self.data_dict[name]['box']
-						weight = self.data_dict[name]['weights']
-						if debug:
-							print(box)
-						padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
-						if debug:
-							print(cbox)
-							print('maxl :', max(cbox[2], cbox[3]))
-						new_j = self._relative_joints(cbox,padd, joints, to_size=64)
-						hm = self._generate_hm(64, 64, new_j, 64, weight)
-						img = self._crop_img(img, padd, cbox)
+						#locations = self.data_dict[name]['locations']
+						#box = self.data_dict[name]['box']
+						#weight = self.data_dict[name]['weights']
+						#if debug:
+							#print(box)
+						#padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
+						#if debug:
+							#print(cbox)
+							#print('maxl :', max(cbox[2], cbox[3]))
+						#new_j = self._relative_joints(cbox,padd, joints, to_size=64)
+						box = [0, 0, img.shape[0], img.shape[1]]
+						locations = self.data_dict[name]
+						resized_locs = self._relative_joints(box, locations, to_size=64)
+						# print(str(resized_locs))
+						#rhm = self._generate_hm(256, 256, self.joints_list, resized_locs)
+						hm = self._generate_hm(64, 64, self.joints_list, resized_locs)
+						#img = self._crop_img(img, padd, cbox)
 						img = img.astype(np.uint8)
 						# On 16 image per batch
 						# Avg Time -OpenCV : 1.0 s -skimage: 1.25 s -scipy.misc.imresize: 1.05s
@@ -414,7 +427,7 @@ class DataGenerator():
 		while True:
 			train_img = np.zeros((batch_size, 256,256,3), dtype = np.float32)
 			train_gtmap = np.zeros((batch_size, stacks, 64, 64, len(self.joints_list)), np.float32)
-			train_weights = np.zeros((batch_size, len(self.joints_list)), np.float32)
+			#train_weights = np.zeros((batch_size, len(self.joints_list)), np.float32)
 			i = 0
 			while i < batch_size:
 				try:
@@ -422,15 +435,20 @@ class DataGenerator():
 						name = random.choice(self.train_set)
 					elif sample_set == 'valid':
 						name = random.choice(self.valid_set)
-					joints = self.data_dict[name]['joints']
-					box = self.data_dict[name]['box']
-					weight = np.asarray(self.data_dict[name]['weights'])
-					train_weights[i] = weight
+					#locations = self.data_dict[name]['locations']
+					#box = self.data_dict[name]['box']
+					#weight = np.asarray(self.data_dict[name]['weights'])
+					#train_weights[i] = weight
 					img = self.open_img(name)
-					padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
-					new_j = self._relative_joints(cbox,padd, joints, to_size=64)
-					hm = self._generate_hm(64, 64, new_j, 64, weight)
-					img = self._crop_img(img, padd, cbox)
+					#padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
+					#new_j = self._relative_joints(cbox,padd, joints, to_size=64)
+					box = [0, 0, img.shape[0], img.shape[1]]
+					locations = self.data_dict[name]
+					resized_locs = self._relative_joints(box, locations, to_size=64)
+					# print(str(resized_locs))
+					#rhm = self._generate_hm(256, 256, self.joints_list, resized_locs)
+					hm = self._generate_hm(64, 64, self.joints_list, resized_locs)
+					#img = self._crop_img(img, padd, cbox)
 					img = img.astype(np.uint8)
 					img = scm.imresize(img, (256,256))
 					img, hm = self._augment(img, hm)
@@ -444,7 +462,7 @@ class DataGenerator():
 					i = i + 1
 				except :
 					print('error file: ', name)
-			yield train_img, train_gtmap, train_weights
+			yield train_img, train_gtmap #train_weights
 					
 	def generator(self, batchSize = 16, stacks = 4, norm = True, sample = 'train'):
 		""" Create a Sample Generator
@@ -490,7 +508,7 @@ class DataGenerator():
 			plt.imshow(img)
 			plt.show()
 	
-	def test(self, toWait = 0.2):
+	def test(self, toWait = 0.9):
 		""" TESTING METHOD
 		You can run it to see if the preprocessing is well done.
 		Wait few seconds for loading, then diaporama appears with image and highlighted joints
@@ -500,23 +518,33 @@ class DataGenerator():
 		"""
 		self._create_train_table()
 		self._create_sets()
+		size = 256
 		for i in range(len(self.train_set)):
-			img = self.open_img(self.train_set[i])
-			w = self.data_dict[self.train_set[i]]['weights']
-			padd, box = self._crop_data(img.shape[0], img.shape[1], self.data_dict[self.train_set[i]]['box'], self.data_dict[self.train_set[i]]['joints'], boxp= 0.0)
-			new_j = self._relative_joints(box,padd, self.data_dict[self.train_set[i]]['joints'], to_size=256)
-			rhm = self._generate_hm(256, 256, new_j,256, w)
-			rimg = self._crop_img(img, padd, box)
+			name = self.train_set[i]
+			img = self.open_img(name)
+			#w = self.data_dict[self.train_set[i]]['weights']
+			#padd, box = self._crop_data(img.shape[0], img.shape[1], self.data_dict[self.train_set[i]]['box'], self.data_dict[self.train_set[i]]['joints'], boxp= 0.0)
+			#new_j = self._relative_joints(box,padd, self.data_dict[self.train_set[i]]['joints'], to_size=256)
+			box = [0,0,img.shape[0],img.shape[1]]
+			locations = self.data_dict[name]
+			resized_locs = self._relative_joints(box, locations, to_size=size)
+			#print(str(resized_locs))
+			rhm = self._generate_hm(size, size, self.joints_list, resized_locs)
+			#rimg = self._crop_img(img, padd, box)
 			# See Error in self._generator
 			#rimg = cv2.resize(rimg, (256,256))
-			rimg = scm.imresize(rimg, (256,256))
+			rimg = scm.imresize(img, (size,size))
 			#rhm = np.zeros((256,256,16))
 			#for i in range(16):
 			#	rhm[:,:,i] = cv2.resize(rHM[:,:,i], (256,256))
 			grimg = cv2.cvtColor(rimg, cv2.COLOR_RGB2GRAY)
 			cv2.imshow('image', grimg / 255 + np.sum(rhm,axis = 2))
-			# Wait
 			time.sleep(toWait)
+			#for type in range(len(resized_locs[2])):
+				#time.sleep(toWait)
+				#cv2.imshow('image', grimg / 255 + rhm[:,:,type])
+				# Wait
+
 			if cv2.waitKey(1) == 27:
 				print('Ended')
 				cv2.destroyAllWindows()
@@ -559,20 +587,25 @@ class DataGenerator():
 		"""
 		if sample != None:
 			try:
-				joints = self.data_dict[sample]['joints']
-				box = self.data_dict[sample]['box']
-				w = self.data_dict[sample]['weights']
+				#joints = self.data_dict[sample]['joints']
+				#box = self.data_dict[sample]['box']
+				#w = self.data_dict[sample]['weights']
 				img = self.open_img(sample)
-				padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
-				new_j = self._relative_joints(cbox,padd, joints, to_size=256)
-				joint_full = np.copy(joints)
-				max_l = max(cbox[2], cbox[3])
-				joint_full = joint_full + [padd[1][0], padd[0][0]]
-				joint_full = joint_full - [cbox[0] - max_l //2,cbox[1] - max_l //2]
-				img = self._crop_img(img, padd, cbox)
+				#padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
+				box = [0, 0, img.shape[0], img.shape[1]]
+				locations = self.data_dict[sample]
+				resized_locs = self._relative_joints(box, locations, to_size=256)
+				# print(str(resized_locs))
+				#rhm = self._generate_hm(256, 256, self.joints_list, resized_locs)
+				#new_j = self._relative_joints(cbox,padd, joints, to_size=256)
+				joint_full = np.copy(locations)
+				max_l = max(box[2], box[3])
+				#joint_full = joint_full + [padd[1][0], padd[0][0]]
+				joint_full = joint_full - [box[0] - max_l //2,box[1] - max_l //2]
+				#img = self._crop_img(img, padd, cbox)
 				img = img.astype(np.uint8)
 				img = scm.imresize(img, (256,256))
-				return img, new_j, w, joint_full, max_l
+				return img, resized_locs, joint_full, max_l ### REMOVED W BECAUSE NO LONGER USED
 			except:
 				return False
 		else:
