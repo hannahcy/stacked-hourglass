@@ -253,7 +253,11 @@ class DataGenerator():
 			#s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) + 2
 			s = int(np.sqrt(width) * width * 10 / 4096) - 5 # CHANGED FROM +2, -5 for "280-small", -10 for "280-tiny" HANNAH
 			for token in range(len(locations[0])):
-				hm[:,:,type,token] = self._makeGaussian(height, width, sigma= s, center= (locations[type][token][0], locations[type][token][1]))
+				#print(locations[type][token][0])
+				if locations[type][token][0] == 0:
+					hm[:, :, type, token] = np.zeros((height, width))
+				else:
+					hm[:,:,type,token] = self._makeGaussian(height, width, sigma= s, center= (locations[type][token][0], locations[type][token][1]))
 		# have hm of shape [height,width,types,tokens]
 		# need to combine all the tokens for each type (simple addition, since they're all zeros otherwise?
 		condensed_hm = np.zeros((height, width, num_joints), dtype = np.float32)
