@@ -4,9 +4,9 @@ line by line, append the relevant information to new line
 append new line to new file
 '''
 
-fileIn = 'datasetMarsden25-25WORDS-TEST.txt'
-fileOut = 'datasetMarsden25-25WORDS-MULTI-TEST.txt'
-num_types = 25
+fileIn = 'datasetMarsden4-4WORDS-TEST.txt'
+fileOut = 'datasetMarsden4-4WORDS-MULTI-TEST.txt'
+num_types = 4
 types = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r' ,'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q']
 
 with open(fileIn, 'r') as f:

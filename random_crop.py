@@ -25,11 +25,12 @@ Copy into new file
 width = 700
 height = 700
 crop_size = 256
+offset = 10000 # 0 for training/validation, 10000 for test
 
 num_types = 25
 
-filelabelsIn = 'datasetMarsden25-25WORDS-MULTI.txt'
-filelabelsOut = 'datasetMarsden25-25WORDS-CROPPED.txt'
+filelabelsIn = 'datasetMarsden25-25WORDS-MULTI-TEST.txt'
+filelabelsOut = 'datasetMarsden25-25WORDS-CROPPED-TEST.txt'
 
 with open(filelabelsIn, 'r') as f:
     lines = f.read()
@@ -58,10 +59,10 @@ final_list = []
 ### new_list now contains all info
 
 # for loop to process all images at once
-for image in range(10000):
+for image in range(100):
 
-    fileimageIn = 'dataMarsden25-25WORDS/'+str("{:05n}".format(image))+'.jpg'
-    fileimageOut = 'dataMarsden25-25CROPPED/'+str("{:05n}".format(image))+'.jpg'
+    fileimageIn = 'dataMarsden25-25WORDS-TEST/'+str("{:05n}".format(offset+image))+'.jpg'
+    fileimageOut = 'dataMarsden25-25CROPPED-TEST/'+str("{:05n}".format(offset+image))+'.jpg'
 
     x = r.randint(0, width-crop_size)
     y = r.randint(0, height-crop_size)
