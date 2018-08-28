@@ -449,13 +449,14 @@ class DataGenerator():
 					box = [0, 0, img.shape[0], img.shape[1]]
 					locations = self.data_dict[name]
 					resized_locs = self._relative_joints(box, locations, to_size=64)
-					# print(str(resized_locs))
+					#print(str(resized_locs))
 					#rhm = self._generate_hm(256, 256, self.joints_list, resized_locs)
 					hm = self._generate_hm(64, 64, self.joints_list, resized_locs)
 					#img = self._crop_img(img, padd, cbox)
 					img = img.astype(np.uint8)
 					img = scm.imresize(img, (256,256))
-					img, hm = self._augment(img, hm)
+					#img, hm = self._augment(img, hm)
+					#print("img, hm augment fine")
 					hm = np.expand_dims(hm, axis = 0)
 					hm = np.repeat(hm, stacks, axis = 0)
 					if normalize:
