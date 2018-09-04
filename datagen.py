@@ -35,6 +35,7 @@ import random
 import time
 from skimage import transform
 import scipy.misc as scm
+import copy
 
 class DataGenerator():
 	""" DataGenerator Class : To generate Train, Validation and Test sets
@@ -129,6 +130,7 @@ class DataGenerator():
 			line = line.strip()
 			line = line.split(' ')
 			name = line[0]
+			#print(name)
 			if name in self.data_dict: # if name is already in data_dict
 				joint = line[1]
 				locs = list(map(int, line[2:]))
@@ -246,15 +248,15 @@ class DataGenerator():
 			locations		: list of lists of locations (for each joint) HANNAH
 		"""
 		num_joints = len(joints)
-		num_tokens = len(locations[0])
+		num_tokens = len(locations[0])*2
 		hm = np.zeros((height, width, num_joints, num_tokens), dtype = np.float32)
 		for type in range(num_joints):
 			#if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
 			#s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) + 2
 			s = int(np.sqrt(width) * width * 10 / 4096) - 5 # CHANGED FROM +2, -5 for "280-small", -10 for "280-tiny" HANNAH
-			for token in range(len(locations[0])):
+			for token in range(len(locations[type])):
 				#print(locations[type][token][0])
-				if locations[type][token][0] == 0:
+				if locations[type][token][0] < 1:
 					hm[:, :, type, token] = np.zeros((height, width))
 				else:
 					hm[:,:,type,token] = self._makeGaussian(height, width, sigma= s, center= (locations[type][token][0], locations[type][token][1]))
@@ -340,12 +342,27 @@ class DataGenerator():
 			padding	: Padding Added to the original Image
 			to_size	: Heat Map wanted Size
 		"""
-		new_j = np.copy(joints)
+		new_j = copy.deepcopy(joints)
+		#print("joints", joints)
+		#print("new_j before", new_j)
 		max_l = max(box[2], box[3])
 		#new_j = new_j + [padding[1][0], padding[0][0]]
 		#new_j = new_j - [box[0] - max_l //2, box[1] - max_l //2]
-		new_j = (new_j * to_size) / (max_l + 0.0000001)
-		return new_j.astype(np.int32)
+		#print(new_j.shape)
+		#print(new_j[0])
+		for type in range(len(new_j)):
+			for token in range(len(new_j[type])):
+				#print(new_j[type][token])
+				#print(new_j[0][elem][0])
+				if new_j[type][token][0] > 0:
+					#print("before", new_j[type][token])
+					new_j[type][token][0] = (new_j[type][token][0] * to_size) / (max_l + 0.0000001)
+					new_j[type][token][1] = (new_j[type][token][1] * to_size) / (max_l + 0.0000001)
+					#print("after", new_j[type][token])
+				#new_j = (new_j * to_size) / (max_l + 0.0000001)
+		#print("new_j after", new_j)
+		#print("new_j as type int32", new_j.astype(np.int32))
+		return new_j #.astype(np.int32)
 		
 		
 	def _augment(self,img, hm, max_rotation = 30):
@@ -444,26 +461,35 @@ class DataGenerator():
 					#weight = np.asarray(self.data_dict[name]['weights'])
 					#train_weights[i] = weight
 					img = self.open_img(name)
+					#print("img fine")
 					#padd, cbox = self._crop_data(img.shape[0], img.shape[1], box, joints, boxp = 0.2)
 					#new_j = self._relative_joints(cbox,padd, joints, to_size=64)
 					box = [0, 0, img.shape[0], img.shape[1]]
+					#print("box fine", box)
 					locations = self.data_dict[name]
+					#print("locations fine")
 					resized_locs = self._relative_joints(box, locations, to_size=64)
+					#print("resized_locs fine")
 					#print(str(resized_locs))
 					#rhm = self._generate_hm(256, 256, self.joints_list, resized_locs)
 					hm = self._generate_hm(64, 64, self.joints_list, resized_locs)
+					#print("augment fine")
 					#img = self._crop_img(img, padd, cbox)
 					img = img.astype(np.uint8)
 					img = scm.imresize(img, (256,256))
+					#print("img resized fine")
 					#img, hm = self._augment(img, hm)
 					#print("img, hm augment fine")
 					hm = np.expand_dims(hm, axis = 0)
+					#print("hm expanded dims fine")
 					hm = np.repeat(hm, stacks, axis = 0)
+					#print("hm repeat stacks fine")
 					if normalize:
 						train_img[i] = img.astype(np.float32) / 255
 					else :
 						train_img[i] = img.astype(np.float32)
 					train_gtmap[i] = hm
+					#print("train_gtmap fine")
 					i = i + 1
 				except :
 					print('error file: ', name)
