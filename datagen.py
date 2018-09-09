@@ -248,7 +248,7 @@ class DataGenerator():
 			locations		: list of lists of locations (for each joint) HANNAH
 		"""
 		num_joints = len(joints)
-		num_tokens = len(locations[0])*2
+		num_tokens = len(locations[0])*10
 		hm = np.zeros((height, width, num_joints, num_tokens), dtype = np.float32)
 		for type in range(num_joints):
 			#if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
