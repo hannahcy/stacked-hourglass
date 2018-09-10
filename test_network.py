@@ -13,11 +13,13 @@ calculate each of 5 top-n accuracies
 
 trained_model = 'trained/hg_26FREQ_CROPPED_256_8_2043'
 filelabelsIn = 'datasetMarsden26FREQ-TEST-CROPPED.txt'
-dirImages = 'dataMarsden26FREQ-TEST/'
+dirImages = 'dataMarsden26FREQ-TEST-CROPPED/'
 
 num_joints = 26
 num_examples = 100
 nameOffset = 10000
+
+joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 
 with open(filelabelsIn, 'r') as f:
     lines = f.read()
@@ -48,84 +50,85 @@ correct = [0,0,0,0,0]
 total_letters = 0
 
 for ex in range(num_examples):
-    img = cv2.imread(dirImages+(nameOffset+ex)+".jpg")
+    img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
     img = cv2.resize(img, (256, 256))
     hms = infer.predictHM(img)
     for type in range(num_joints):
-        tokens = copy.deepcopy(new_list[ex][type+(ex*num_joints)])
+        tokens = copy.deepcopy(new_list[type+(ex*num_joints)][2])
         token = 0
+        #print(str(nameOffset + ex), joint_list[type], np.amax(hms[0, :, :, type]))
         while token < len(tokens)-1:
-            total_letters += 1
-            x = tokens[token]
-            y = tokens[token+1]
-            max_activations = [0] * num_joints
-            for map in range(num_joints):
-                heatmap = copy.deepcopy(hms[0, :, :, map])
-                max_in_region = 0
-                for xx in range(x-2,x+3):
-                    for yy in range(y-2,y+3):
-                        activation = heatmap[xx][yy]
-                        if activation > max_in_region:
-                            max_in_region = activation
-                max_activations[map] = max_in_region
-            max = max(max_activations)
-            index = max_activations.index(max)
-            if index == type:
-                correct[0] += 1
-                correct[1] += 1
-                correct[2] += 1
-                correct[3] += 1
-                correct[4] += 1
-            else:
-                max_activations[index] = 0
-                max = max(max_activations)
-                index = max_activations.index(max)
+            x = int((int(tokens[token])/256) * 64)
+            y = int((int(tokens[token+1])/256) * 64)
+            if x > 61:
+                x = 61
+            if y > 61:
+                y = 61
+            if x > 0:
+                #print(x,y)
+                total_letters += 1
+                max_activations = [0] * num_joints
+                for map in range(num_joints):
+                    norm_max = np.amax(hms[0, :, :, map])
+                    heatmap = copy.deepcopy(hms[0, :, :, map])
+                    if norm_max > 0.5:
+                        heatmap = heatmap*(1 / norm_max)
+                    max_in_region = 0
+                    for xx in range(x-2,x+3):
+                        for yy in range(y-2,y+3):
+                            activation = heatmap[xx][yy]
+                            if activation > max_in_region:
+                                max_in_region = activation
+                    max_activations[map] = max_in_region
+                #print(max_activations)
+                max1 = np.amax(max_activations)
+                index = max_activations.index(max1)
                 if index == type:
+                    correct[0] += 1
                     correct[1] += 1
                     correct[2] += 1
                     correct[3] += 1
                     correct[4] += 1
                 else:
                     max_activations[index] = 0
-                    max = max(max_activations)
-                    index = max_activations.index(max)
+                    max2 = max(max_activations)
+                    index = max_activations.index(max2)
                     if index == type:
+                        correct[1] += 1
                         correct[2] += 1
                         correct[3] += 1
                         correct[4] += 1
                     else:
                         max_activations[index] = 0
-                        max = max(max_activations)
-                        index = max_activations.index(max)
+                        max3 = max(max_activations)
+                        index = max_activations.index(max3)
                         if index == type:
+                            correct[2] += 1
                             correct[3] += 1
                             correct[4] += 1
                         else:
                             max_activations[index] = 0
-                            max = max(max_activations)
-                            index = max_activations.index(max)
+                            max4 = max(max_activations)
+                            index = max_activations.index(max4)
                             if index == type:
+                                correct[3] += 1
                                 correct[4] += 1
+                            else:
+                                max_activations[index] = 0
+                                max5 = max(max_activations)
+                                index = max_activations.index(max5)
+                                if index == type:
+                                    correct[4] += 1
             token += 2
 
-top1_accuracy = correct[0]/total_letters
-top2_accuracy = correct[1]/total_letters
-top3_accuracy = correct[2]/total_letters
-top4_accuracy = correct[3]/total_letters
-top5_accuracy = correct[4]/total_letters
-print("Top1:"+str(top1_accuracy))
-print("Top2:"+str(top2_accuracy))
-print("Top3:"+str(top3_accuracy))
-print("Top4:"+str(top4_accuracy))
-print("Top5:"+str(top5_accuracy))
+top1_accuracy = (correct[0]/total_letters)*100
+top2_accuracy = (correct[1]/total_letters)*100
+top3_accuracy = (correct[2]/total_letters)*100
+top4_accuracy = (correct[3]/total_letters)*100
+top5_accuracy = (correct[4]/total_letters)*100
+print("Top1:"+str(top1_accuracy)+"%")
+print("Top2:"+str(top2_accuracy)+"%")
+print("Top3:"+str(top3_accuracy)+"%")
+print("Top4:"+str(top4_accuracy)+"%")
+print("Top5:"+str(top5_accuracy)+"%")
 print(str(correct[0]),str(correct[1]),str(correct[2]),str(correct[3]),str(correct[4]),str(total_letters))
-
-'''
-    for i in range(np.shape(hms)[3]):
-        max = np.amax(hms[0, :, :, i])
-        temp = copy.deepcopy(hms[0, :, :, i]*(150/max))
-        temp_big = cv2.resize(temp, (256, 256))
-        img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite('heatmaps-good/Marsden25CROPPED/e60_25W_CROPPED_256_8_'+examples[ex]+'_'+str(joint_list[i])+'.jpg', (img_grey+temp_big)) #np.maximum(img_grey,temp_big))
-    print(examples[ex]+".jpg done")
-    '''
