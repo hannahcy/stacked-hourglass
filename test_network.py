@@ -3,6 +3,54 @@ import cv2
 import numpy as np
 import copy
 
+
+def makeGaussian(height, width, sigma=3, center=None):
+    """ Make a square gaussian kernel.
+    size is the length of a side of the square
+    sigma is full-width-half-maximum, which
+    can be thought of as an effective radius.
+    """
+    x = np.arange(0, width, 1, float)
+    y = np.arange(0, height, 1, float)[:, np.newaxis]
+    if center is None:
+        x0 = width // 2
+        y0 = height // 2
+    else:
+        x0 = center[0]
+        y0 = center[1]
+    return np.exp(-4 * np.log(2) * ((x - x0) ** 2 + (y - y0) ** 2) / sigma ** 2)
+
+
+def generate_hm(height, width, joints, locations):
+    """ Generate a full Heap Map for every joints in an array
+    Args:
+        height			: Wanted Height for the Heat Map
+        width			: Wanted Width for the Heat Map
+        joints			: Array of Joints
+        locations		: list of lists of locations (for each joint) HANNAH
+    """
+    num_joints = len(joints)
+    num_tokens = len(locations[0]) * 20
+    hm = np.zeros((height, width, num_joints, num_tokens), dtype=np.float32)
+    for typea in range(num_joints):
+        # if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
+        # s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) + 2
+        s = int(
+            np.sqrt(width) * width * 10 / 4096) - 5  # CHANGED FROM +2, -5 for "280-small", -10 for "280-tiny" HANNAH
+        for tokena in range(len(locations[type])):
+            # print(locations[type][token][0])
+            if locations[typea][tokena][0] < 1:
+                hm[:, :, typea, tokena] = np.zeros((height, width))
+            else:
+                hm[:, :, typea, tokena] = makeGaussian(height, width, sigma=s, center=(
+                locations[typea][tokena][0], locations[typea][tokena][1]))
+    # have hm of shape [height,width,types,tokens]
+    # need to combine all the tokens for each type (simple addition, since they're all zeros otherwise?
+    condensed_hm = np.zeros((height, width, num_joints), dtype=np.float32)
+    for typeb in range(num_joints):
+        for tokenb in range(num_tokens):
+            condensed_hm[:, :, typeb] = condensed_hm[:, :, typeb] + hm[:, :, typeb, tokenb]
+    return condensed_hm
 '''
 read in labels to multi-dimensional array
 for each true letter,
@@ -12,7 +60,8 @@ calculate each of 5 top-n accuracies
 '''
 
 topN = False
-F1 = True
+F1 = False
+full_hm = True
 threshold = 0.5
 
 trained_model = 'trained/hg_26FREQ_CROPPED_256_8_2043'
@@ -49,6 +98,39 @@ for i in range(len(lines_as_list) - 1):
     new_list.append(new_line)
 
 infer=Inference(model=trained_model)
+
+if full_hm:
+    # for each image
+    # construct Gaussian heatmap (copy code from datagen)
+    # get heatmap through infer
+    # compare the two, pixelwise
+    # try just average difference, 1-ans, ans*100
+    total_err = 0
+    for ex in range(num_examples):
+        img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
+        img = cv2.resize(img, (256, 256))
+        hms = infer.predictHM(img)
+        start = ex*num_joints
+        end = start + num_joints
+        locations = copy.deepcopy(new_list[start:end])
+        targets = generate_hm(64,64,joint_list,locations)
+        height = 64
+        for map in range(num_joints):
+            output = copy.deepcopy(hms[0, :, :, map])
+            target = copy.deepcopy(targets[:,:,map])
+            total = 0
+            for i in range(height):
+                for j in range(height):
+                    diff = output[0][i][j] - target[i][j]
+                    abs_diff = abs(diff)
+                    total += abs_diff
+            err = total/height*height
+            total_err += err
+    average_err = total_err/(num_joints*num_examples)
+    print("Average Error: "+str(average_err))
+    accuracy = 1-average_err
+    print("Average Accuracy: " + str(average_acc))
+
 
 if F1:
     total_letters = 0
