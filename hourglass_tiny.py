@@ -696,18 +696,18 @@ class HourglassModel():
 		:param v:
 		:return:
 		"""
-		total = 0
-		num_pixels = 64*64
-		u = tf.reshape(u,[-1])
-		v = tf.reshape(v, [-1])
-		for i in range(num_pixels):
-			diff = u[i] - v[i]
-			abs_diff = abs(diff)
-			total += abs_diff
-		average_err = total/num_pixels
-
-		#return tf.divide(tf.reduce_sum(tf.square(tf.subtract(u,v))), 64*64)
-		return average_err
+		#total = 0
+		#num_pixels = 64*64
+		#u = tf.reshape(u,[-1])
+		#v = tf.reshape(v, [-1])
+		#for i in range(num_pixels):
+		#diffs = u[i] - v[i]
+		#abs_diffs = abs(diff)
+		#total += abs_diff
+		#average_err = total/num_pixels
+		#return tf.divide(tf.reduce_sum(tf.square(tf.subtract(u,v))), num_pixels)
+		#return average_err
+		return tf.losses.mean_squared_error(u,v)
 
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
