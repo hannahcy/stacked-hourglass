@@ -697,11 +697,14 @@ class HourglassModel():
 		:return:
 		"""
 		total = 0
-		for i in range(len(u)):
+		num_pixels = 64*64
+		u = tf.reshape(u,[-1])
+		v = tf.reshape(v, [-1])
+		for i in range(num_pixels):
 			diff = u[i] - v[i]
 			abs_diff = abs(diff)
 			total += abs_diff
-		average_err = total/len(u)
+		average_err = total/num_pixels
 
 		#return tf.divide(tf.reduce_sum(tf.square(tf.subtract(u,v))), 64*64)
 		return average_err
