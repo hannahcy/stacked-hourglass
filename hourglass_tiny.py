@@ -726,7 +726,7 @@ class HourglassModel():
 			### For error based on maximum point:
 			#err = tf.add(err, self._compute_err(pred[i], gtMap[i]))
 		#return tf.subtract(tf.to_float(1), err/num_image)
-		return 1 - (err / num_image)
+		return tf.subtract(tf.to_float(1),tf.divide(err, num_image))
 	
 	# MULTI CONTEXT ATTENTION MECHANISM
 	# WORK IN PROGRESS DO NOT USE THESE METHODS
