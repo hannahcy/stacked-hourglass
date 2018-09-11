@@ -696,7 +696,7 @@ class HourglassModel():
 		:param v:
 		:return:
 		"""
-		return tf.sqrt(tf.divide(tf.reduce_sum(tf.square(tf.subtract(u,v))), 64*64))
+		return tf.divide(tf.reduce_sum(tf.square(tf.subtract(u,v))), 64*64)
 
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
@@ -715,7 +715,7 @@ class HourglassModel():
 			### For error based on maximum point:
 			#err = tf.add(err, self._compute_err(pred[i], gtMap[i]))
 		#return tf.subtract(tf.to_float(1), err/num_image)
-		return err / num_image
+		return 1-(err / num_image)
 	
 	# MULTI CONTEXT ATTENTION MECHANISM
 	# WORK IN PROGRESS DO NOT USE THESE METHODS
