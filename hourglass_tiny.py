@@ -266,7 +266,7 @@ class HourglassModel():
 					percent = ((i+1)/epochSize) * 100
 					num = np.int(20*percent/100)
 					tToEpoch = int((time.time() - epochstartTime) * (100 - percent)/(percent))
-					sys.stdout.write('\r Train: {0}>'.format("="*num) + "{0}>".format(" "*(20-num)) + '||' + str(percent)[:4] + '%' + ' -cost: ' + str(cost)[:6] + ' -avg_loss: ' + str(avg_cost)[:5] + ' -timeToEnd: ' + str(tToEpoch) + ' sec.')
+					sys.stdout.write('\r Train: {0}>'.format("="*num) + "{0}>".format(" "*(20-num)) + '||' + str(percent)[:4] + '%' + ' -cost: ' + str(cost)[:6] + ' -avg_cost: ' + str(avg_cost)[:6] + ' -timeToEnd: ' + str(tToEpoch) + ' sec.')
 					sys.stdout.flush()
 					img_train, gt_train = next(self.generator)
 					if i % saveStep == 0:
@@ -318,7 +318,8 @@ class HourglassModel():
 					#if i is 1:
 						#print(accuracy_pred)
 					accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
-				print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
+				avg_acc = (1-avg_cost)*100
+				print('--Avg. Accuracy =', str(avg_acc))#str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
 				self.resume['accur'].append(accuracy_pred)
 				self.resume['err'].append(np.sum(accuracy_array) / len(accuracy_array))
 				valid_summary = self.Session.run(self.test_op, feed_dict={self.img : img_valid, self.gtMaps: gt_valid})
