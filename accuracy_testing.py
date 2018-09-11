@@ -75,20 +75,20 @@ class AccuracyTester():
 
 if __name__ == '__main__':
     target = []
-    with open('gtMaps0.txt', 'r') as f:
+    with open('gtMaps26FREQ.txt', 'r') as f:
         target = json.load(f)
     target = np.array(target)
     #print("Target:")
     #print(target)
     output = []
-    with open('output0.txt', 'r') as f:
+    with open('output26FREQ.txt', 'r') as f:
         output = json.load(f)
     output = np.array(output)
     #print("Output:")
     #print(output)
-    nStack = 4
+    nStack = 1
     batchSize = 4
-    digits = [0, 1, 2, 3]
+    digits = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r' ,'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
     tester = AccuracyTester(joints=digits,output=output,gtMaps=target,batchSize=batchSize,nStack=nStack)
     #print(output.shape)
     #print(target.shape)
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     for image in range(batchSize):
         print("\nImage: ", str(image))
         for digit in range(len(digits)):
-            print("Digit: ", str(digit))
+            print("Digit: ", digits[digit])
             max_target = np.amax(target[image, nStack - 1, :, :, digit])
             argmax_target = np.argmax(target[image, nStack - 1, :, :, digit])
             print("amax target:", str(max_target), "argmax target:", str(argmax_target),
@@ -106,9 +106,9 @@ if __name__ == '__main__':
             print("amax output:", str(max_output), "argmax output:", str(argmax_output),
                   "x,y:", str(argmax_output % 64), str(argmax_output // 64))
             temp = copy.deepcopy(target[image, nStack - 1, :, :, digit] * (255 / max_target))
-            cv2.imwrite('testing/e0c_target'+ str(image) + '_' + str(digit) + '.jpg', temp)
+            cv2.imwrite('testing/26FREQ_target'+ str(image) + '_' + str(digits[digit]) + '.jpg', temp)
             temp = copy.deepcopy(output[image, nStack - 1, :, :, digit] * (255 / max_output))
-            cv2.imwrite('testing/e0c_output'+ str(image) + '_' + str(digit) + '.jpg', temp)
+            cv2.imwrite('testing/26FREQ_output'+ str(image) + '_' + str(digits[digit]) + '.jpg', temp)
             error = tester._compute_err(target[image, nStack - 1, :, :, digit], output[image, nStack - 1, :, :, digit])
             print("Error:", str(error))
 

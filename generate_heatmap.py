@@ -3,24 +3,26 @@ import cv2
 import numpy as np
 import copy
 
-infer=Inference(model='trained/hg_25W_CROPPED_256_8_61')
+infer=Inference(model='trained/hg_26FREQ_CROPPED_256_8_2043')
 
-examples = ['00358','00826','03783','04646','06097','06351','06402','06685','08684','08836',
-            '09147','09184','09301','09410','09462','09530','09557','09795','09887','09985',
-            '10004','10005','10006','10010','10037','10041','10046','10048','10071','10084',
-            '20000','20001','20002','20003','20004','20005','20006','20007','20008','20009','20010','20011']
-joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q']
+examples = ['00009'] #['00358','00826','03783','04646','06097','06351','06402','06685','08684','08836',
+ #           '09147','09184','09301','09410','09462','09530','09557','09795','09887','09985',
+  #          '10004','10005','10006','10010','10037','10041','10046','10048','10071','10084',
+   #         '20000','20001','20002','20003','20004','20005','20006','20007','20008','20009','20010','20011','20012']
+joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 
 for ex in range(len(examples)):
-    img = cv2.imread("dataMarsden25-25CROPPEDSELECTION/"+examples[ex]+".jpg")
+    img = cv2.imread("dataMarsden26FREQ-ONE/"+examples[ex]+".jpg")
     img = cv2.resize(img, (256, 256))
     hms = infer.predictHM(img)
+    print(hms.shape)
     for i in range(np.shape(hms)[3]):
         max = np.amax(hms[0, :, :, i])
-        temp = copy.deepcopy(hms[0, :, :, i]*(150/max))
+        temp = copy.deepcopy(hms[0, :, :, i]*(255)) #/max))
+        cv2.imwrite('testing/26FREQ_output' +examples[ex]+ '_' + str(joint_list[i]) + '.jpg', temp)
         temp_big = cv2.resize(temp, (256, 256))
         img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        cv2.imwrite('heatmaps-good/Marsden25CROPPED/e60_25W_CROPPED_256_8_'+examples[ex]+'_'+str(joint_list[i])+'.jpg', (img_grey+temp_big)) #np.maximum(img_grey,temp_big))
+        #cv2.imwrite('heatmaps-good/Marsden26FREQCROPPED/e2043_26FREQ_CROPPED_256_8_'+examples[ex]+'_'+str(joint_list[i])+'.jpg', (img_grey+temp_big)) #np.maximum(img_grey,temp_big))
     print(examples[ex]+".jpg done")
 
 

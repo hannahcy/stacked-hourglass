@@ -241,13 +241,14 @@ class HourglassModel():
 				img_valid, gt_valid = next(self.generator)
 				np.set_printoptions(threshold=np.nan)
 				accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
-				with open('output0.txt', 'w') as f:
+				with open('output26FREQ.txt', 'w') as f:
 					json.dump(output.tolist(), f)
-				with open('gtMaps0.txt', 'w') as f:
+				with open('gtMaps26FREQ.txt', 'w') as f:
 					json.dump(target.tolist(), f)
 				with open('extras.txt', 'w') as f:
 					f.write(str(self.nStack) + '\n')
 					f.write(str(self.batchSize))
+				#print("PRINTED TO FILE")
 				#if i == 1:
 					#print(accuracy_pred)
 				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
@@ -695,7 +696,7 @@ class HourglassModel():
 		:param v:
 		:return:
 		"""
-		return tf.divide(tf.sqrt(tf.reduce_sum(tf.square(tf.subtract(u,v)))), 64*64)
+		return tf.sqrt(tf.divide(tf.reduce_sum(tf.square(tf.subtract(u,v))), 64*64))
 
 	def _accur(self, pred, gtMap, num_image):
 		""" Given a Prediction batch (pred) and a Ground Truth batch (gtMaps),
