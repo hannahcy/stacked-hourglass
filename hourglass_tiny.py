@@ -80,7 +80,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/gpu:0' # (was 0)
+		self.gpu = '/cpu:0' # (was 0)
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints
@@ -237,6 +237,7 @@ class HourglassModel():
 			print('Before training\n')
 			accuracy_array = np.array([0.0] * len(self.joint_accur))
 			print("validIter: "+ str(validIter))
+			'''
 			for i in range(validIter):
 				img_valid, gt_valid = next(self.generator)
 				np.set_printoptions(threshold=np.nan)
@@ -254,6 +255,7 @@ class HourglassModel():
 				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
 			print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
 			#end my insertion
+			'''
 			for epoch in range(1,nEpochs+1):
 				epochstartTime = time.time()
 				avg_cost = 0.
@@ -317,7 +319,7 @@ class HourglassModel():
 						f.write(str(self.batchSize))
 					#if i is 1:
 						#print(accuracy_pred)
-					accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
+					# CHANGED TO 1-COST accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
 				avg_acc = (1-avg_cost)*100
 				print('--Avg. Accuracy =', str(avg_acc))#str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
 				self.resume['accur'].append(accuracy_pred)

@@ -30,20 +30,22 @@ def generate_hm(height, width, joints, locations):
         locations		: list of lists of locations (for each joint) HANNAH
     """
     num_joints = len(joints)
-    num_tokens = len(locations[0]) * 20
+    num_tokens = len(locations[0]) * 50
     hm = np.zeros((height, width, num_joints, num_tokens), dtype=np.float32)
     for typea in range(num_joints):
         # if not(np.array_equal(joints[i], [-1,-1])) and weight[i] == 1:
         # s = int(np.sqrt(maxlenght) * maxlenght * 10 / 4096) + 2
         s = int(
             np.sqrt(width) * width * 10 / 4096) - 5  # CHANGED FROM +2, -5 for "280-small", -10 for "280-tiny" HANNAH
-        for tokena in range(len(locations[type])):
+        tokena = 0
+        while tokena < len(locations[typea][2])-1:
             # print(locations[type][token][0])
-            if locations[typea][tokena][0] < 1:
+            if int(locations[typea][2][tokena]) < 1:
                 hm[:, :, typea, tokena] = np.zeros((height, width))
             else:
                 hm[:, :, typea, tokena] = makeGaussian(height, width, sigma=s, center=(
-                locations[typea][tokena][0], locations[typea][tokena][1]))
+                int(locations[typea][2][tokena]), int(locations[typea][2][tokena+1])))
+            tokena +=2
     # have hm of shape [height,width,types,tokens]
     # need to combine all the tokens for each type (simple addition, since they're all zeros otherwise?
     condensed_hm = np.zeros((height, width, num_joints), dtype=np.float32)
@@ -59,18 +61,18 @@ set max1, 2 -5
 calculate each of 5 top-n accuracies
 '''
 
-topN = False
+topN = True
 F1 = False
-full_hm = True
+full_hm = False
 threshold = 0.5
 
 trained_model = 'trained/hg_26FREQ_CROPPED_256_8_2043'
-filelabelsIn = 'datasetMarsden26FREQ-TEST-CROPPED.txt'
-dirImages = 'dataMarsden26FREQ-TEST-CROPPED/'
+filelabelsIn = 'datasetMarsdenREALTEST.txt' #'datasetMarsden26FREQ-TEST-CROPPED.txt'
+dirImages = 'dataMarsdenREALTEST/' #'dataMarsden26FREQ-TEST-CROPPED/'
 
 num_joints = 26
-num_examples = 100
-nameOffset = 10000
+num_examples = 20 # 100
+nameOffset = 25000 #10000
 
 joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 
@@ -107,7 +109,7 @@ if full_hm:
     # try just average difference, 1-ans, ans*100
     total_err = 0
     for ex in range(num_examples):
-        img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
+        img = cv2.imread(dirImages+str("{:05n}".format(nameOffset+ex))+".jpg")
         img = cv2.resize(img, (256, 256))
         hms = infer.predictHM(img)
         start = ex*num_joints
@@ -121,15 +123,18 @@ if full_hm:
             total = 0
             for i in range(height):
                 for j in range(height):
-                    diff = output[0][i][j] - target[i][j]
+                    diff = output[i][j] - target[i][j]
                     abs_diff = abs(diff)
                     total += abs_diff
-            err = total/height*height
+            err = total/(height*height)
+            print("Average error for " + joint_list[map] + ": " + str(err))
             total_err += err
+        print(str(nameOffset+ex)+".jpg Done!")
+        print(str(total_err/(num_joints*(ex+1))) + " error so far!")
     average_err = total_err/(num_joints*num_examples)
     print("Average Error: "+str(average_err))
-    accuracy = 1-average_err
-    print("Average Accuracy: " + str(average_acc))
+    accuracy = (1-average_err)*100
+    print("Average Accuracy: " + str(accuracy)+"%")
 
 
 if F1:
@@ -216,8 +221,8 @@ if topN:
                                     max_in_region = activation
                         max_activations[map] = max_in_region
                     #print(max_activations)
-                    max1 = np.amax(max_activations)
-                    index = max_activations.index(max1)
+                    #max1 = np.amax(max_activations)
+                    index = np.argmax(max_activations) #.index(max1)
                     if index == type:
                         correct[0] += 1
                         correct[1] += 1
