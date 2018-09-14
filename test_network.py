@@ -62,17 +62,19 @@ calculate each of 5 top-n accuracies
 '''
 
 topN = True
-F1 = False
+F1 = True
 full_hm = False
 threshold = 0.5
 
-trained_model = 'trained/hg_26FREQ_CROPPED_256_8_2043'
-filelabelsIn = 'datasetMarsdenREALTEST.txt' #'datasetMarsden26FREQ-TEST-CROPPED.txt'
-dirImages = 'dataMarsdenREALTEST/' #'dataMarsden26FREQ-TEST-CROPPED/'
+trained_model = 'trained/hg_26UNIF_CROPPED_256_8_707' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
+filelabelsIn = 'datasetMarsden26UNIF-CROPPED.txt' # 'datasetMarsdenREALTEST.txt' #
+dirImages = 'dataMarsden26UNIF-CROPPED/' # 'dataMarsdenREALTEST/' #
 
+epoch = 700
+data = "Training" # "Training" "Validation" "Testing" "Real"
 num_joints = 26
-num_examples = 20 # 100
-nameOffset = 25000 #10000
+num_examples = 100 # 100 for training, validation, testing. 20 for REALTEST
+nameOffset = 8035 # 8035 for training, 9442 for validation, 10000 for testing, 25000 for REALTEST
 
 joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 
@@ -142,7 +144,8 @@ if F1:
     true_pos = 0
     false_pos = 0
     for ex in range(num_examples):
-        img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
+        img = cv2.imread(dirImages + str("{:05n}".format(nameOffset + ex)) + ".jpg")
+        #img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
         img = cv2.resize(img, (256, 256))
         hms = infer.predictHM(img)
         for type in range(num_joints):
@@ -160,37 +163,39 @@ if F1:
                     total_letters += 1
                     max_activations = [0] * num_joints
                     for map in range(num_joints):
-                        norm_max = np.amax(hms[0, :, :, map])
+                        #norm_max = np.amax(hms[0, :, :, map])
                         heatmap = copy.deepcopy(hms[0, :, :, map])
-                        if norm_max > 0.5:
-                            heatmap = heatmap*(1 / norm_max)
+                        #if norm_max > 0.5:
+                            #heatmap = heatmap*(1 / norm_max)
                         max_in_region = 0
                         for xx in range(x-2,x+3):
                             for yy in range(y-2,y+3):
-                                activation = heatmap[xx][yy]
+                                activation = heatmap[yy][xx]
                                 if activation > max_in_region:
                                     max_in_region = activation
                         max_activations[map] = max_in_region
-                        for letter in range(len(max_activations)):
-                            if max_activations[letter] > threshold:
-                                if letter == type:
-                                    true_pos += 1
-                                else:
-                                    false_pos += 1
+                    for letter in range(len(max_activations)):
+                        if max_activations[letter] > threshold:
+                            if letter == type:
+                                true_pos += 1
+                            else:
+                                false_pos += 1
                 token += 2
     precision = (true_pos/(true_pos+false_pos))*100
     recall = (true_pos/total_letters)*100
     f1 = (2*precision*recall)/(precision+recall) # harmonic average of precision and recall
-    print("Precision: "+str(precision)+"%")
-    print("Recall: " + str(recall) + "%")
-    print("F1: " + str(f1))
+    print("Epoch: "+str(epoch) + ", " + data + " dataset" )
+    print("Precision: "+str(round(precision,2))+"%")
+    print("Recall: " + str(round(recall,2)) + "%")
+    print("F1 score: " + str(round(f1,2)) + "%")
     print("Total letters: "+str(total_letters)+" True pos: "+str(true_pos)+" False pos: "+str(false_pos))
 
 if topN:
     correct = [0, 0, 0, 0, 0]
     total_letters = 0
     for ex in range(num_examples):
-        img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
+        img = cv2.imread(dirImages + str("{:05n}".format(nameOffset + ex)) + ".jpg")
+        #img = cv2.imread(dirImages+str(nameOffset+ex)+".jpg")
         img = cv2.resize(img, (256, 256))
         hms = infer.predictHM(img)
         for type in range(num_joints):
@@ -216,13 +221,13 @@ if topN:
                         max_in_region = 0
                         for xx in range(x-2,x+3):
                             for yy in range(y-2,y+3):
-                                activation = heatmap[xx][yy]
+                                activation = heatmap[yy][xx]
                                 if activation > max_in_region:
                                     max_in_region = activation
                         max_activations[map] = max_in_region
                     #print(max_activations)
-                    #max1 = np.amax(max_activations)
-                    index = np.argmax(max_activations) #.index(max1)
+                    max1 = np.amax(max_activations)
+                    index = max_activations.index(max1)
                     if index == type:
                         correct[0] += 1
                         correct[1] += 1
@@ -266,9 +271,9 @@ if topN:
     top3_accuracy = (correct[2]/total_letters)*100
     top4_accuracy = (correct[3]/total_letters)*100
     top5_accuracy = (correct[4]/total_letters)*100
-    print("Top1:"+str(top1_accuracy)+"%")
-    print("Top2:"+str(top2_accuracy)+"%")
-    print("Top3:"+str(top3_accuracy)+"%")
-    print("Top4:"+str(top4_accuracy)+"%")
-    print("Top5:"+str(top5_accuracy)+"%")
+    print("Top1: "+str(round(top1_accuracy,2))+"%")
+    print("Top2: "+str(round(top2_accuracy,2))+"%")
+    print("Top3: "+str(round(top3_accuracy,2))+"%")
+    print("Top4: "+str(round(top4_accuracy,2))+"%")
+    print("Top5: "+str(round(top5_accuracy,2))+"%")
     print(str(correct[0]),str(correct[1]),str(correct[2]),str(correct[3]),str(correct[4]),str(total_letters))

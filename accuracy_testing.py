@@ -106,7 +106,7 @@ if __name__ == '__main__':
             print("amax output:", str(max_output), "argmax output:", str(argmax_output),
                   "x,y:", str(argmax_output % 64), str(argmax_output // 64))
             temp = copy.deepcopy(target[image, nStack - 1, :, :, digit] * (255 / max_target))
-            cv2.imwrite('testing/26FREQ_target'+ str(image) + '_' + str(digits[digit]) + '.jpg', temp)
+            cv2.imwrite('testing/FORPAPER_target'+ str(image) + '_' + str(digits[digit]) + '.jpg', temp)
             temp = copy.deepcopy(output[image, nStack - 1, :, :, digit] * (255 / max_output))
             cv2.imwrite('testing/26FREQ_output'+ str(image) + '_' + str(digits[digit]) + '.jpg', temp)
             error = tester._compute_err(target[image, nStack - 1, :, :, digit], output[image, nStack - 1, :, :, digit])

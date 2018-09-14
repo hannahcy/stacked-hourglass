@@ -237,25 +237,25 @@ class HourglassModel():
 			print('Before training\n')
 			accuracy_array = np.array([0.0] * len(self.joint_accur))
 			print("validIter: "+ str(validIter))
-			'''
+
 			for i in range(validIter):
 				img_valid, gt_valid = next(self.generator)
 				np.set_printoptions(threshold=np.nan)
 				accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
-				with open('output26FREQ.txt', 'w') as f:
-					json.dump(output.tolist(), f)
+				#with open('output26FREQ.txt', 'w') as f:
+				#	json.dump(output.tolist(), f)
 				with open('gtMaps26FREQ.txt', 'w') as f:
 					json.dump(target.tolist(), f)
 				with open('extras.txt', 'w') as f:
 					f.write(str(self.nStack) + '\n')
 					f.write(str(self.batchSize))
-				#print("PRINTED TO FILE")
+				print("PRINTED TO FILE")
 				#if i == 1:
 					#print(accuracy_pred)
-				accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
-			print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
+				#accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
+			#print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
 			#end my insertion
-			'''
+
 			for epoch in range(1,nEpochs+1):
 				epochstartTime = time.time()
 				avg_cost = 0.
