@@ -80,7 +80,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/gpu:0' # (was 0)
+		self.gpu = '/cpu:0' # (was 0)
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints

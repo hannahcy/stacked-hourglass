@@ -66,15 +66,15 @@ F1 = True
 full_hm = False
 threshold = 0.5
 
-trained_model = 'trained/hg_26UNIF_CROPPED_256_8_707' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
-filelabelsIn = 'datasetMarsden26UNIF-CROPPED.txt' # 'datasetMarsdenREALTEST.txt' #
-dirImages = 'dataMarsden26UNIF-CROPPED/' # 'dataMarsdenREALTEST/' #
+trained_model = 'trained/hg_26FREQ_CROPPED_256_4_216' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
+filelabelsIn = 'datasetMarsdenREALTEST.txt' #'convicts.txt' # 'datasetMarsden26FREQ-CROPPEDSELECTION.txt' #
+dirImages = 'dataMarsdenREALTEST/' #'dataMarsden26FREQ-CROPPEDSELECTION/' #
 
-epoch = 700
-data = "Training" # "Training" "Validation" "Testing" "Real"
+epoch = 216
+data = "Real" # "Training" "Validation" "Testing" "Real"
 num_joints = 26
-num_examples = 100 # 100 for training, validation, testing. 20 for REALTEST
-nameOffset = 8035 # 8035 for training, 9442 for validation, 10000 for testing, 25000 for REALTEST
+num_examples = 20 # 100 for training, validation, testing. 20 for REALTEST
+nameOffset = 25000 # 8035 for training, 9442 for validation, 10000 for testing, 25000 for REALTEST
 
 joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 
@@ -184,6 +184,7 @@ if F1:
     precision = (true_pos/(true_pos+false_pos))*100
     recall = (true_pos/total_letters)*100
     f1 = (2*precision*recall)/(precision+recall) # harmonic average of precision and recall
+    print(trained_model)
     print("Epoch: "+str(epoch) + ", " + data + " dataset" )
     print("Precision: "+str(round(precision,2))+"%")
     print("Recall: " + str(round(recall,2)) + "%")
@@ -225,9 +226,10 @@ if topN:
                                 if activation > max_in_region:
                                     max_in_region = activation
                         max_activations[map] = max_in_region
-                    #print(max_activations)
+                    #print(joint_list[type]+":")
                     max1 = np.amax(max_activations)
                     index = max_activations.index(max1)
+                    #print("1: "+joint_list[index])
                     if index == type:
                         correct[0] += 1
                         correct[1] += 1
@@ -238,6 +240,7 @@ if topN:
                         max_activations[index] = 0
                         max2 = max(max_activations)
                         index = max_activations.index(max2)
+                        #print("2: "+joint_list[index])
                         if index == type:
                             correct[1] += 1
                             correct[2] += 1
@@ -247,6 +250,7 @@ if topN:
                             max_activations[index] = 0
                             max3 = max(max_activations)
                             index = max_activations.index(max3)
+                            #print("3: "+joint_list[index])
                             if index == type:
                                 correct[2] += 1
                                 correct[3] += 1
@@ -255,6 +259,7 @@ if topN:
                                 max_activations[index] = 0
                                 max4 = max(max_activations)
                                 index = max_activations.index(max4)
+                                #print("4: "+joint_list[index])
                                 if index == type:
                                     correct[3] += 1
                                     correct[4] += 1
@@ -262,6 +267,7 @@ if topN:
                                     max_activations[index] = 0
                                     max5 = max(max_activations)
                                     index = max_activations.index(max5)
+                                    #print("5: "+joint_list[index])
                                     if index == type:
                                         correct[4] += 1
                 token += 2
