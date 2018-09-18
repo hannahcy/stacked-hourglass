@@ -66,11 +66,11 @@ F1 = True
 full_hm = False
 threshold = 0.5
 
-trained_model = 'trained/hg_26FREQ_CROPPED_256_4_216' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
+trained_model = 'trained/hg_26FREQ_CROPPED_64_4_295' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
 filelabelsIn = 'datasetMarsdenREALTEST.txt' #'convicts.txt' # 'datasetMarsden26FREQ-CROPPEDSELECTION.txt' #
 dirImages = 'dataMarsdenREALTEST/' #'dataMarsden26FREQ-CROPPEDSELECTION/' #
 
-epoch = 216
+epoch = 295
 data = "Real" # "Training" "Validation" "Testing" "Real"
 num_joints = 26
 num_examples = 20 # 100 for training, validation, testing. 20 for REALTEST

@@ -80,7 +80,7 @@ class HourglassModel():
 		self.modif = modif
 		self.dataset = dataset
 		self.cpu = '/cpu:0'
-		self.gpu = '/cpu:0' # (was 0)
+		self.gpu = '/gpu:0' # CHANGE TO CPU IF NOT USING GPU
 		self.logdir_train = logdir_train
 		self.logdir_test = logdir_test
 		self.joints = joints
@@ -235,25 +235,29 @@ class HourglassModel():
 			# Added accuracy output before any training
 			print('Epoch:' + '0/' + str(nEpochs) + '\n')
 			print('Before training\n')
-			accuracy_array = np.array([0.0] * len(self.joint_accur))
+			#accuracy_array = np.array([0.0] * len(self.joint_accur))
+			validation_loss = 0
 			print("validIter: "+ str(validIter))
 
 			for i in range(validIter):
-				img_valid, gt_valid = next(self.generator)
+				img_valid, gt_valid = next(self.valid_gen)
 				np.set_printoptions(threshold=np.nan)
-				accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
+				accuracy_pred, output, target = self.Session.run([self.loss, self.output, self.gtMaps], feed_dict={self.img: img_valid, self.gtMaps: gt_valid})
 				#with open('output26FREQ.txt', 'w') as f:
 				#	json.dump(output.tolist(), f)
-				with open('gtMaps26FREQ.txt', 'w') as f:
-					json.dump(target.tolist(), f)
-				with open('extras.txt', 'w') as f:
-					f.write(str(self.nStack) + '\n')
-					f.write(str(self.batchSize))
-				print("PRINTED TO FILE")
+				#with open('gtMaps26FREQ.txt', 'w') as f:
+					#json.dump(target.tolist(), f)
+				#with open('extras.txt', 'w') as f:
+					#f.write(str(self.nStack) + '\n')
+					#f.write(str(self.batchSize))
+				#print("PRINTED TO FILE")
 				#if i == 1:
 					#print(accuracy_pred)
-				#accuracy_array += np.array(accuracy_pred, dtype=np.float32) / validIter
-			#print('--Avg. Accuracy =', str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%')
+				#accuracy_array += np.array(accuracy_pred, dtype=np.float32) #/ validIter
+				validation_loss += accuracy_pred
+			av_val_loss = validation_loss / validIter
+			val_acc = (1 - av_val_loss) * 100 #[:6]
+			print('--Avg. Validation Accuracy =', str(val_acc), '%')
 			#end my insertion
 
 			for epoch in range(1,nEpochs+1):
@@ -284,7 +288,7 @@ class HourglassModel():
 							_, c, = self.Session.run([self.train_rmsprop, self.loss], feed_dict = {self.img : img_train, self.gtMaps: gt_train, self.weights: weight_train})
 						else:	
 							_, c, = self.Session.run([self.train_rmsprop, self.loss], feed_dict = {self.img : img_train, self.gtMaps: gt_train})
-					#if i is 1:
+					#if i == 1:
 						#print(self.get_output())
 					cost += c
 					avg_cost += c/epochSize
@@ -303,27 +307,32 @@ class HourglassModel():
 					self.saver.save(self.Session, os.path.join(os.getcwd(),str(self.name + '_' + str(epoch + 1))))
 				self.resume['loss'].append(cost)
 				# Validation Set
-				accuracy_array = np.array([0.0]*len(self.joint_accur))
+				#accuracy_array = np.array([0.0]*len(self.joint_accur))
+				validation_loss = 0
 				#temp = self.get_output()
 				#tf.Print(temp, [temp])
 				for i in range(validIter):
-					img_valid, gt_valid = next(self.generator)
+					img_valid, gt_valid = next(self.valid_gen)
 					np.set_printoptions(threshold=np.nan)
-					accuracy_pred, output, target = self.Session.run([self.joint_accur, self.output, self.gtMaps], feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
-					with open('output99.txt', 'w') as f:
-						json.dump(output.tolist(), f)
-					with open('gtMaps99.txt', 'w') as f:
-						json.dump(target.tolist(), f)
-					with open('extras99.txt', 'w') as f:
-						f.write(str(self.nStack) + '\n')
-						f.write(str(self.batchSize))
+					accuracy_pred, output, target = self.Session.run([self.loss, self.output, self.gtMaps], feed_dict = {self.img : img_valid, self.gtMaps: gt_valid})
+					#with open('output99.txt', 'w') as f:
+					#	json.dump(output.tolist(), f)
+					#with open('gtMaps99.txt', 'w') as f:
+					#	json.dump(target.tolist(), f)
+					#with open('extras99.txt', 'w') as f:
+					#	f.write(str(self.nStack) + '\n')
+					#	f.write(str(self.batchSize))
 					#if i is 1:
 						#print(accuracy_pred)
-					# CHANGED TO 1-COST accuracy_array += np.array(accuracy_pred, dtype = np.float32) / validIter
+					#accuracy_array += np.array(accuracy_pred, dtype = np.float32) #/ validIter
+					validation_loss += accuracy_pred
 				avg_acc = (1-avg_cost)*100
-				print('--Avg. Accuracy =', str(avg_acc))#str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
+				av_val_loss = validation_loss / validIter
+				val_acc = (1 - av_val_loss) * 100  # [:6]
+				print('--Avg. Training Accuracy =', str(avg_acc), '%') #str((np.sum(accuracy_array) / len(accuracy_array)) * 100)[:6], '%' )
+				print('--Avg. Validation Accuracy =', str(val_acc), '%')
 				self.resume['accur'].append(accuracy_pred)
-				self.resume['err'].append(np.sum(accuracy_array) / len(accuracy_array))
+				#self.resume['err'].append(np.sum(accuracy_array) / len(accuracy_array))
 				valid_summary = self.Session.run(self.test_op, feed_dict={self.img : img_valid, self.gtMaps: gt_valid})
 				self.test_summary.add_summary(valid_summary, epoch)
 				self.test_summary.flush()
