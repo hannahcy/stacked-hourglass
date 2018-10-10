@@ -62,19 +62,19 @@ calculate each of 5 top-n accuracies
 '''
 
 topN = True
-F1 = True
+F1 = False
 full_hm = False
 threshold = 0.5
 
-trained_model = 'trained/hg_26FREQ_CROPPED_256_4_216' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
-filelabelsIn = 'datasetMarsdenREALTEST.txt' #'convicts.txt' # 'datasetMarsden26FREQ-CROPPEDSELECTION.txt' #
-dirImages = 'dataMarsdenREALTEST/' #'dataMarsden26FREQ-CROPPEDSELECTION/' #
+trained_model = 'trained/hg_26FREQ_CROPPED_256_8_2043' # 'trained/hg_26FREQ_CROPPED_256_8_501' #
+filelabelsIn = 'datasetMarsden26FREQ-ONE.txt' #'datasetMarsdenREALTEST.txt' #'convicts.txt' #
+dirImages = 'dataMarsden26FREQ-CROPPED/' # 'dataMarsdenREALTEST/' #
 
-epoch = 216
+epoch = 500
 data = "Real" # "Training" "Validation" "Testing" "Real"
 num_joints = 26
-num_examples = 20 # 100 for training, validation, testing. 20 for REALTEST
-nameOffset = 25000 # 8035 for training, 9442 for validation, 10000 for testing, 25000 for REALTEST
+num_examples = 1000 # 100 for training, validation, testing. 20 for REALTEST
+nameOffset = 9000 # 8035 for training, 9442 for validation, 10000 for testing, 25000 for REALTEST
 
 joint_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 
